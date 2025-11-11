@@ -10,5 +10,6 @@
         <h2>Xhess</h2>
         <a><button>Log in</button></a>
     </header>
+    <h1>SELECCIONA TU ESCUELA</h1>
 </body>
 </html>
