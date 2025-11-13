@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-11-2025 a las 15:18:54
+-- Tiempo de generación: 13-11-2025 a las 15:20:26
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,6 +35,14 @@ CREATE TABLE `emparejamientos` (
   `color` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `emparejamientos`
+--
+
+INSERT INTO `emparejamientos` (`id_emparejamiento`, `id_jugador`, `id_partida`, `puntaje`, `color`) VALUES
+(1, 2, 1, '1', 'blancas'),
+(2, 1, 1, '0', 'negras');
+
 -- --------------------------------------------------------
 
 --
@@ -46,6 +54,14 @@ CREATE TABLE `equipos` (
   `nombre` varchar(20) NOT NULL,
   `puntaje_equipo` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `equipos`
+--
+
+INSERT INTO `equipos` (`id_equipo`, `nombre`, `puntaje_equipo`) VALUES
+(1, 'tutifruti', '3'),
+(2, 'patito feo', '2');
 
 -- --------------------------------------------------------
 
@@ -62,6 +78,14 @@ CREATE TABLE `jugadores` (
   `ciudad_club` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `jugadores`
+--
+
+INSERT INTO `jugadores` (`id_jugador`, `id_equipo`, `nombre`, `apellido`, `elo`, `ciudad_club`) VALUES
+(1, 2, 'juancho', 'perez', 750, 'ags'),
+(2, 1, 'pedrito', 'rodriguez', 750, 'ags');
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +98,13 @@ CREATE TABLE `partida` (
   `resultado_partida` varchar(10) NOT NULL,
   `mesa` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `partida`
+--
+
+INSERT INTO `partida` (`id_partida`, `id_ronda`, `resultado_partida`, `mesa`) VALUES
+(1, 1, 'blancas', 2);
 
 -- --------------------------------------------------------
 
@@ -89,6 +120,13 @@ CREATE TABLE `rondas` (
   `fecha_inicio` date NOT NULL,
   `fecha_fin` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `rondas`
+--
+
+INSERT INTO `rondas` (`id_ronda`, `id_torneo`, `numero_ronda`, `resultado_ronda`, `fecha_inicio`, `fecha_fin`) VALUES
+(1, 1, 1, 'blancas', '2025-11-11', '2025-11-13');
 
 -- --------------------------------------------------------
 
@@ -106,6 +144,14 @@ CREATE TABLE `torneo` (
   `fecha_inicio` date NOT NULL,
   `fecha_fin` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `torneo`
+--
+
+INSERT INTO `torneo` (`id_torneo`, `id_equipo_ganador`, `nombre`, `estado`, `ritmo_tiempo`, `lugar`, `fecha_inicio`, `fecha_fin`) VALUES
+(0, 1, 'xxxx', 1, '3min', 'otra prepa', '2025-11-11', '2025-11-13'),
+(1, 1, 'tutifruti', 1, '3min', 'cbtis168', '2025-11-11', '2025-11-13');
 
 --
 -- Índices para tablas volcadas
@@ -152,6 +198,40 @@ ALTER TABLE `rondas`
 ALTER TABLE `torneo`
   ADD PRIMARY KEY (`id_torneo`),
   ADD KEY `id_equipo_ganador` (`id_equipo_ganador`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `emparejamientos`
+--
+ALTER TABLE `emparejamientos`
+  MODIFY `id_emparejamiento` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `equipos`
+--
+ALTER TABLE `equipos`
+  MODIFY `id_equipo` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `jugadores`
+--
+ALTER TABLE `jugadores`
+  MODIFY `id_jugador` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `partida`
+--
+ALTER TABLE `partida`
+  MODIFY `id_partida` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `rondas`
+--
+ALTER TABLE `rondas`
+  MODIFY `id_ronda` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
