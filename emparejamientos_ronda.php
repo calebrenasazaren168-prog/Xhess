@@ -55,68 +55,63 @@
         }
         echo "</div>";
         
-        // Consulta para obtener los emparejamientos de la ronda actual
-        $sql_emparejamientos = "SELECT 
-                                jb.id_jugador as id_blancas,
-                                jb.nombre as nombre_blancas,
-                                jb.apellido as apellido_blancas,
-                                jn.id_jugador as id_negras,
-                                jn.nombre as nombre_negras,
-                                jn.apellido as apellido_negras,
-                                p.resultado_partida,
+        // Consulta para obtener los enfrentamientos entre equipos con resultados
+        $sql_enfrentamientos = "SELECT DISTINCT
+                                eb.nombre as equipo_blancas,
+                                en.nombre as equipo_negras,
                                 em_b.puntaje as puntaje_blancas,
-                                em_n.puntaje as puntaje_negras,
-                                p.mesa
+                                em_n.puntaje as puntaje_negras
                             FROM partida p
                             JOIN rondas r ON p.id_ronda = r.id_ronda
                             JOIN emparejamientos em_b ON p.id_partida = em_b.id_partida AND em_b.color = 'blancas'
                             JOIN emparejamientos em_n ON p.id_partida = em_n.id_partida AND em_n.color = 'negras'
                             JOIN jugadores jb ON em_b.id_jugador = jb.id_jugador
                             JOIN jugadores jn ON em_n.id_jugador = jn.id_jugador
+                            JOIN equipos eb ON jb.id_equipo = eb.id_equipo
+                            JOIN equipos en ON jn.id_equipo = en.id_equipo
                             WHERE r.id_torneo = ? AND r.numero_ronda = ?
-                            ORDER BY p.mesa";
+                            ORDER BY eb.nombre";
         
-        $stmt_emparejamientos = $conexion->prepare($sql_emparejamientos);
-        $stmt_emparejamientos->bind_param("ii", $id_torneo, $ronda_actual);
-        $stmt_emparejamientos->execute();
-        $result_emparejamientos = $stmt_emparejamientos->get_result();
+        $stmt_enfrentamientos = $conexion->prepare($sql_enfrentamientos);
+        $stmt_enfrentamientos->bind_param("ii", $id_torneo, $ronda_actual);
+        $stmt_enfrentamientos->execute();
+        $result_enfrentamientos = $stmt_enfrentamientos->get_result();
         
-        if ($result_emparejamientos && $result_emparejamientos->num_rows > 0) {
+        if ($result_enfrentamientos && $result_enfrentamientos->num_rows > 0) {
             echo "<table border='1'>";
             echo "<tr>
-                    <th>Mesa</th>
-                    <th>Blancas (ID)</th>
-                    <th>Negras (ID)</th>
+                    <th>Equipo Blancas</th>
                     <th>Resultado</th>
+                    <th>Equipo Negras</th>
                   </tr>";
             
-            while($emparejamiento = $result_emparejamientos->fetch_assoc()) {
-                $resultado = $emparejamiento['puntaje_blancas'] . "-" . $emparejamiento['puntaje_negras'];
+            while($enfrentamiento = $result_enfrentamientos->fetch_assoc()) {
+                $resultado = $enfrentamiento['puntaje_blancas'] . "-" . $enfrentamiento['puntaje_negras'];
                 
                 echo "<tr>
-                        <td>" . $emparejamiento['mesa'] . "</td>
-                        <td>" . $emparejamiento['nombre_blancas'] . " " . $emparejamiento['apellido_blancas'] . " (" . $emparejamiento['id_blancas'] . ")</td>
-                        <td>" . $resultado . "</td>
-                        <td>" . $emparejamiento['nombre_negras'] . " " . $emparejamiento['apellido_negras'] . " (" . $emparejamiento['id_negras'] . ")</td>                        
+                        <td>" . $enfrentamiento['equipo_blancas'] . "</td>
+                        <td><strong>" . $resultado . "</strong></td>
+                        <td>" . $enfrentamiento['equipo_negras'] . "</td>
                       </tr>";
             }
             echo "</table>";
         } else {
-            echo "<p>No se encontraron emparejamientos para la ronda $ronda_actual.</p>";
+            echo "<p>No se encontraron enfrentamientos entre equipos para la ronda $ronda_actual.</p>";
         }
         
-        $stmt_emparejamientos->close();
+        $stmt_enfrentamientos->close();
         
         echo "<br><a href='jugadores_torneo.php?id_torneo=$id_torneo'>Volver a jugadores del torneo</a>";
-        echo "<br><a href='index.php'>Volver a la lista de torneos</a>";
+        echo "<br><a href='torneos_escuela.php'>Volver a la lista de torneos</a>";
         
     } else {
         echo "<p>No se ha seleccionado ningún torneo.</p>";
-        echo "<a href='index.php'>Volver a la lista de torneos</a>";
+        echo "<a href='torneos_escuela.php'>Volver a la lista de torneos</a>";
     }
     
     // Cerrar conexión
     $conexion->close();
     ?>
+    <a href="emparejamientos_ronda.php?id_torneo=<?php echo $id_torneo; ?>&ronda=<?php echo $ronda_actual; ?>">Refrescar página</a>
 </body>
 </html>
