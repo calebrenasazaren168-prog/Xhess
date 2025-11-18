@@ -13,7 +13,7 @@
     include('conexion.php');
     
     if (isset($_GET['id_torneo']) && !empty($_GET['id_torneo'])) {
-        $id_torneo = $_GET['id_torneo'];
+        $id_torneo= $_GET['id_torneo'];
         $ronda_actual = isset($_GET['ronda']) ? intval($_GET['ronda']) : 1;
         $equipo_seleccionado = isset($_GET['equipo']) ? $_GET['equipo'] : '';
         
