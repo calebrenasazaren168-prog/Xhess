@@ -102,11 +102,11 @@
         $stmt_enfrentamientos->close();
         
         echo "<br><a href='jugadores_torneo.php?id_torneo=$id_torneo'>Volver a jugadores del torneo</a>";
-        echo "<br><a href='torneos_escuela.php'>Volver a la lista de torneos</a>";
+        echo "<br><a href='index.php'>Volver a la lista de torneos</a>";
         
     } else {
         echo "<p>No se ha seleccionado ningún torneo.</p>";
-        echo "<a href='torneos_escuela.php'>Volver a la lista de torneos</a>";
+        echo "<a href='index.php'>Volver a la lista de torneos</a>";
     }
     
     // Cerrar conexión

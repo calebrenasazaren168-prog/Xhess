@@ -8,8 +8,8 @@
 <body>
     <header style="display: flex; justify-content: space-between; align-items: center;">
         <h3>Xhess</h3>
-        <a><button>Log in</button></a>
-    </header>
+       <a href="login2.php"> <button>Log in</button></a>
+   </header>
     <h1>Consulta de Torneos por Escuela</h1>
     
     <form method="POST" action="">
