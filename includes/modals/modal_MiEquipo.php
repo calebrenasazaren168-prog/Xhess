@@ -16,10 +16,10 @@
                                 <h6 class="mb-0">Mi Equipo Actual</h6>
                             </div>
                             <div class="card-body">
-                                <?php if ($equipo_actual): ?>
+                                <?php if ($equipo_actual && !empty($equipo_actual['id_equipo'])): ?>  <!-- Cambiado: Verifica si hay id_equipo -->
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <h5><?= htmlspecialchars($equipo_actual['nombre']) ?></h5>
+                                            <h5><?= htmlspecialchars($equipo_actual['equipo_nombre']) ?></h5>  <!-- Cambiado: Usa 'equipo_nombre' en lugar de 'nombre' -->
                                             <p class="mb-1"><strong>Club:</strong> <?= htmlspecialchars($equipo_actual['club_nombre']) ?></p>
                                             <p class="mb-0 text-muted">Eres miembro de este equipo</p>
                                         </div>
