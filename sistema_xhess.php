@@ -1199,7 +1199,7 @@ private function inscribirJugadorEnTorneosEquipo($id_jugador, $id_equipo) {
         AND t.condicion = 'en_progreso'
         AND te.retirado = 0
         GROUP BY t.id_torneo, t.nro_tableros
-        HAVING rondas_generadas <= 1  // Solo torneos en ronda 1 o menos
+        HAVING rondas_generadas <= 1  
     ");
     $stmt->execute([$id_equipo]);
     $torneos_inscribir = $stmt->fetchAll();
