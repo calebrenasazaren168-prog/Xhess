@@ -369,45 +369,56 @@
                                                             if (empty($emparejamientosTorneo)): ?>
                                                                 <p class="text-muted">No hay emparejamientos para este torneo.</p>
                                                             <?php else: ?>
-                                                                <?php 
-                                                                $ronda_actual = 0;
-                                                                foreach ($emparejamientosTorneo as $emparejamiento): 
-                                                                    if ($emparejamiento['numero_ronda'] != $ronda_actual): 
-                                                                        $ronda_actual = $emparejamiento['numero_ronda'];
+                                                                <?php
+                                                                // 1. Agrupamos primero todas las partidas por número de ronda
+                                                                $emparejamientosPorRonda = [];
+                                                                foreach ($emparejamientosTorneo as $emp) {
+                                                                    $ronda = $emp['numero_ronda'];
+                                                                    $emparejamientosPorRonda[$ronda][] = $emp;
+                                                                }
+
+                                                                // 2. Ahora imprimimos cada ronda de forma ordenada y segura
+                                                                if (empty($emparejamientosPorRonda)) {
+                                                                    ?>
+                                                                    <p class="text-muted">No hay emparejamientos registrados para este torneo todavía.</p>
+                                                                    <?php
+                                                                } else {
+                                                                    foreach ($emparejamientosPorRonda as $numero_ronda => $partidasDeEstaRonda) {
+                                                                        // Tomamos la fecha de la primera partida (todas de la misma ronda deberían tener la misma fecha)
+                                                                        $fecha_ronda = date('d/m/Y', strtotime($partidasDeEstaRonda[0]['fecha_ronda']));
+                                                                        ?>
+                                                                        <h6 class="mt-4">Ronda <?= $numero_ronda ?> - <?= $fecha_ronda ?></h6>
+                                                                        
+                                                                        <table class="table table-sm table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Tablero</th>
+                                                                                    <th>Blancas</th>
+                                                                                    <th>Negras</th>
+                                                                                    <th>Resultado</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <?php foreach ($partidasDeEstaRonda as $emparejamiento): ?>
+                                                                                <tr>
+                                                                                    <td><?= htmlspecialchars($emparejamiento['tablero']) ?></td>
+                                                                                    <td>
+                                                                                        <?= htmlspecialchars($emparejamiento['jugador_blancas_nombre'] . ' ' . $emparejamiento['jugador_blancas_apellido']) ?>
+                                                                                        <br><small class="text-muted"><?= htmlspecialchars($emparejamiento['equipo_blancas_nombre'] ?? '—') ?></small>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <?= htmlspecialchars($emparejamiento['jugador_negras_nombre'] . ' ' . $emparejamiento['jugador_negras_apellido']) ?>
+                                                                                        <br><small class="text-muted"><?= htmlspecialchars($emparejamiento['equipo_negras_nombre'] ?? '—') ?></small>
+                                                                                    </td>
+                                                                                    <td><?= htmlspecialchars($emparejamiento['resultado'] ?: '*') ?></td>
+                                                                                </tr>
+                                                                            <?php endforeach; ?>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <?php
+                                                                    }
+                                                                }
                                                                 ?>
-                                                                    <h6 class="mt-4">Ronda <?= $ronda_actual ?> - <?= date('d/m/Y', strtotime($emparejamiento['fecha_ronda'])) ?></h6>
-                                                                    <table class="table table-sm table-bordered">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>Tablero</th>
-                                                                                <th>Blancas</th>
-                                                                                <th>Negras</th>
-                                                                                <th>Resultado</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                <?php endif; ?>
-                                                                            <tr>
-                                                                                <td><?= $emparejamiento['tablero'] ?></td>
-                                                                                <td>
-                                                                                    <?= htmlspecialchars($emparejamiento['jugador_blancas_nombre'] . ' ' . $emparejamiento['jugador_blancas_apellido']) ?>
-                                                                                    <br><small class="text-muted"><?= htmlspecialchars($emparejamiento['equipo_blancas_nombre']) ?></small>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <?= htmlspecialchars($emparejamiento['jugador_negras_nombre'] . ' ' . $emparejamiento['jugador_negras_apellido']) ?>
-                                                                                    <br><small class="text-muted"><?= htmlspecialchars($emparejamiento['equipo_negras_nombre']) ?></small>
-                                                                                </td>
-                                                                                <td><?= $emparejamiento['resultado'] ?></td>
-                                                                            </tr>
-                                                                <?php 
-                                                                    $siguiente = next($emparejamientosTorneo);
-                                                                    if (!$siguiente || $siguiente['numero_ronda'] != $ronda_actual): 
-                                                                        prev($emparejamientosTorneo);
-                                                                ?>
-                                                                        </tbody>
-                                                                    </table>
-                                                                <?php endif; ?>
-                                                                <?php endforeach; ?>
                                                             <?php endif; ?>
                                                         </div>
                                                     </div>
