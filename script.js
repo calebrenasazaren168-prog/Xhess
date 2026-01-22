@@ -67,8 +67,13 @@ function confirmarAccion(mensaje, formElement) {
 }
 
 function confirmarEnvio(formId, mensaje) {
+    const form = document.getElementById(formId);
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
     if (confirm(mensaje)) {
-        document.getElementById(formId).submit();
+        form.submit();
     }
 }
 

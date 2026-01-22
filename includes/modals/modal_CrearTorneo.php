@@ -71,7 +71,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="confirmarEnvio('form-crear-torneo', '¿Crear este torneo?')">Crear Torneo</button>
+                            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Crear este torneo?')">
+                                <i class="fas fa-trophy"></i> Crear Torneo
+                            </button>
                         </div>
                     </form>
                 </div>
