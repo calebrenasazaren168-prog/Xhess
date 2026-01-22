@@ -1,0 +1,174 @@
+.inicio-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+}
+.card-hover {
+            transition: transform 0.3s ease;
+}
+.card-hover:hover {
+            transform: translateY(-5px);
+}
+.rating-badge {
+            background: #28a745;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+}
+.navbar-brand {
+            font-weight: bold;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+}
+.navbar-logo {
+            width: 40px;
+            height: 40px;
+            filter: brightness(0) invert(1);
+}
+.table-responsive {
+            max-height: 500px;
+}
+.tab-pane {
+            padding: 20px 0;
+}
+.result-btn {
+            width: 60px;
+            margin: 2px;
+}
+.clasification-badge {
+            font-size: 0.7em;
+            margin-left: 5px;
+}
+.equipo-card {
+            border-left: 4px solid #007bff;
+}
+.action-buttons {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 100;
+            padding: 10px 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+}
+.printable-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: white;
+}
+.resultado-seleccionado {
+            background-color: #007bff !important;
+            color: white !important;
+}
+.btn-group-vertical .btn {
+            margin-bottom: 2px;
+}
+.footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+            position: relative;
+            width: 100%;
+        }
+.footer h5 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+.footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            margin-bottom: 8px;
+        }
+.footer-links a:hover {
+            color: #3498db;
+        }
+.footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+    }
+.footer-social a {
+            color: #bdc3c7;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+    }
+.footer-social a:hover {
+            color: #3498db;
+    }
+.footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            color: #95a5a6;
+    }
+.footer-logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            filter: brightness(0) invert(1);
+    }
+        
+body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
+        }
+
+        .modal-backdrop {
+            z-index: 1040;
+        }
+        .modal {
+            z-index: 1050;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .main-content {
+            flex: 1;
+            padding-bottom: 20px; /* Espacio extra al final */
+        }
+
+        .footer {
+            margin-top: auto !important;
+        }
+        .footer {
+            background: #2c3e50 !important;
+            color: white !important;
+            padding: 40px 0 20px !important;
+            margin-top: auto !important;
+            position: relative !important;
+            width: 100% !important;
+            display: block !important;
+        }
+
+        .container.py-5, .bg-light.py-5 {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .main-content {
+            min-height: 70vh;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
