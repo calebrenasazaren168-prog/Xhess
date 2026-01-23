@@ -148,55 +148,116 @@ class TorneoManager {
         return $stmt->fetchAll();
     }
     
-    public function obtenerClasificacionEquipos($id_torneo) {
-        $stmt = $this->pdo->prepare("
-            SELECT e.id_equipo, e.nombre as equipo_nombre,
-                COUNT(p.id_partida) as partidas_jugadas,
-                SUM(CASE WHEN p.resultado = '1-0' AND em.equipo_blancas = e.id_equipo THEN 1 
-                         WHEN p.resultado = '0-1' AND em.equipo_negras = e.id_equipo THEN 1 ELSE 0 END) as victorias,
-                SUM(CASE WHEN p.resultado = '1/2' THEN 1 ELSE 0 END) as empates,
-                SUM(CASE WHEN p.resultado = '0-1' AND em.equipo_blancas = e.id_equipo THEN 1 
-                         WHEN p.resultado = '1-0' AND em.equipo_negras = e.id_equipo THEN 1 ELSE 0 END) as derrotas,
-                SUM(CASE WHEN p.resultado = '1-0' AND em.equipo_blancas = e.id_equipo THEN 1 
-                         WHEN p.resultado = '0-1' AND em.equipo_negras = e.id_equipo THEN 1 
-                         WHEN p.resultado = '1/2' THEN 0.5 ELSE 0 END) as puntos_match,
-                COALESCE(SUM(ee.puntos_tableros), 0) as puntos_tableros
-            FROM equipos e
-            INNER JOIN torneo_equipos te ON e.id_equipo = te.id_equipo
-            LEFT JOIN emparejamientos em ON (em.equipo_blancas = e.id_equipo OR em.equipo_negras = e.id_equipo)
-            LEFT JOIN partidas p ON em.id_emparejamiento = p.id_emparejamiento
-            LEFT JOIN estadisticas_equipo ee ON (e.id_equipo = ee.id_equipo AND ee.id_torneo = ?)
-            WHERE te.id_torneo = ?
-            GROUP BY e.id_equipo, e.nombre
-            ORDER BY puntos_match DESC, puntos_tableros DESC
-        ");
-        $stmt->execute([$id_torneo, $id_torneo]);
-        return $stmt->fetchAll();
-    }
+   public function obtenerClasificacionEquipos($id_torneo) {
+    $sql = "
+        SELECT 
+            e.id_equipo,
+            e.nombre AS equipo_nombre,
+            COUNT(DISTINCT em.id_emparejamiento) AS partidas_jugadas,
+            COALESCE(SUM(CASE 
+                WHEN sub_punt.puntuacion_blancas IS NOT NULL AND sub_punt.puntuacion_negras IS NOT NULL AND
+                     ((em.equipo_blancas = e.id_equipo AND sub_punt.puntuacion_blancas > sub_punt.puntuacion_negras) 
+                      OR (em.equipo_negras = e.id_equipo AND sub_punt.puntuacion_negras > sub_punt.puntuacion_blancas)) 
+                THEN 1 ELSE 0 
+            END), 0) AS victorias,
+            COALESCE(SUM(CASE 
+                WHEN sub_punt.puntuacion_blancas IS NOT NULL AND sub_punt.puntuacion_negras IS NOT NULL AND
+                     sub_punt.puntuacion_blancas = sub_punt.puntuacion_negras 
+                THEN 1 ELSE 0 
+            END), 0) AS empates,
+            COALESCE(SUM(CASE 
+                WHEN sub_punt.puntuacion_blancas IS NOT NULL AND sub_punt.puntuacion_negras IS NOT NULL AND
+                     ((em.equipo_blancas = e.id_equipo AND sub_punt.puntuacion_blancas < sub_punt.puntuacion_negras) 
+                      OR (em.equipo_negras = e.id_equipo AND sub_punt.puntuacion_negras < sub_punt.puntuacion_blancas)) 
+                THEN 1 ELSE 0 
+            END), 0) AS derrotas,
+            COALESCE(SUM(CASE 
+                WHEN sub_punt.puntuacion_blancas IS NOT NULL AND sub_punt.puntuacion_negras IS NOT NULL AND
+                     ((em.equipo_blancas = e.id_equipo AND sub_punt.puntuacion_blancas > sub_punt.puntuacion_negras) 
+                      OR (em.equipo_negras = e.id_equipo AND sub_punt.puntuacion_negras > sub_punt.puntuacion_blancas)) 
+                THEN 2
+                WHEN sub_punt.puntuacion_blancas = sub_punt.puntuacion_negras 
+                THEN 1
+                ELSE 0
+            END), 0) AS puntos_match,
+            COALESCE(SUM(CASE 
+                WHEN em.equipo_blancas = e.id_equipo THEN COALESCE(sub_punt.puntuacion_blancas, 0)
+                WHEN em.equipo_negras = e.id_equipo THEN COALESCE(sub_punt.puntuacion_negras, 0)
+                ELSE 0
+            END), 0) AS puntos_tableros
+        FROM 
+            equipos e
+INNER JOIN 
+            torneo_equipos te ON e.id_equipo = te.id_equipo
+LEFT JOIN 
+            (SELECT * FROM emparejamientos WHERE id_ronda IN (SELECT id_ronda FROM rondas WHERE id_torneo = ?)) em ON (em.equipo_blancas = e.id_equipo OR em.equipo_negras = e.id_equipo)
+LEFT JOIN (
+    SELECT 
+        id_emparejamiento,
+        SUM(CASE WHEN resultado = '1-0' THEN 1 WHEN resultado = '1/2' THEN 0.5 ELSE 0 END) AS puntuacion_blancas,
+        SUM(CASE WHEN resultado = '0-1' THEN 1 WHEN resultado = '1/2' THEN 0.5 ELSE 0 END) AS puntuacion_negras
+    FROM partidas 
+    GROUP BY id_emparejamiento
+) sub_punt ON em.id_emparejamiento = sub_punt.id_emparejamiento
+WHERE 
+    te.id_torneo = ?
+    AND te.retirado = 0
+GROUP BY 
+    e.id_equipo, e.nombre
+ORDER BY 
+    puntos_match DESC, puntos_tableros DESC, e.nombre
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([$id_torneo, $id_torneo]);
+    return $stmt->fetchAll();
+}
     
     public function obtenerClasificacionJugadores($id_torneo) {
         $stmt = $this->pdo->prepare("
-            SELECT j.id_jugador,
-                CONCAT(j.nombre, ' ', COALESCE(j.apellido, '')) as nombre_jugador,
-                e.nombre as equipo_nombre, j.rating,
-                COUNT(p.id_partida) as partidas_jugadas,
-                SUM(CASE WHEN (p.id_jugador_blancas = j.id_jugador AND p.resultado = '1-0') OR
-                             (p.id_jugador_negras = j.id_jugador AND p.resultado = '0-1') THEN 1 ELSE 0 END) as victorias,
-                SUM(CASE WHEN p.resultado = '1/2' THEN 1 ELSE 0 END) as empates,
-                SUM(CASE WHEN (p.id_jugador_blancas = j.id_jugador AND p.resultado = '0-1') OR
-                             (p.id_jugador_negras = j.id_jugador AND p.resultado = '1-0') THEN 1 ELSE 0 END) as derrotas,
-                COALESCE(SUM(CASE WHEN (p.id_jugador_blancas = j.id_jugador AND p.resultado = '1-0') OR
-                                       (p.id_jugador_negras = j.id_jugador AND p.resultado = '0-1') THEN 1
-                                  WHEN p.resultado = '1/2' THEN 0.5 ELSE 0 END), 0) as puntos
-            FROM jugadores j
-            INNER JOIN torneo_jugadores tj ON j.id_jugador = tj.id_jugador
-            LEFT JOIN equipos e ON j.id_equipo = e.id_equipo
-            LEFT JOIN partidas p ON (p.id_jugador_blancas = j.id_jugador OR p.id_jugador_negras = j.id_jugador)
-            LEFT JOIN emparejamientos em ON p.id_emparejamiento = em.id_emparejamiento
-            LEFT JOIN rondas r ON em.id_ronda = r.id_ronda
-            WHERE tj.id_torneo = ?
-            GROUP BY j.id_jugador, j.nombre, j.apellido, e.nombre, j.rating
-            ORDER BY puntos DESC, victorias DESC, j.rating DESC
+            SELECT 
+    j.id_jugador,  -- Para uso interno si necesitas
+    CONCAT(j.nombre, ' ', j.apellido) AS nombre_jugador,
+    e.nombre AS equipo_nombre,
+    j.rating,
+    COUNT(DISTINCT p.id_partida) AS partidas_jugadas,  -- Cuenta únicas para evitar duplicados
+    SUM(CASE 
+        WHEN (p.id_jugador_blancas = j.id_jugador AND p.resultado = '1-0') 
+             OR (p.id_jugador_negras = j.id_jugador AND p.resultado = '0-1') 
+        THEN 1 ELSE 0 END) AS victorias,
+    SUM(CASE WHEN p.resultado = '1/2' THEN 1 ELSE 0 END) AS empates,
+    SUM(CASE 
+        WHEN (p.id_jugador_blancas = j.id_jugador AND p.resultado = '0-1') 
+             OR (p.id_jugador_negras = j.id_jugador AND p.resultado = '1-0') 
+        THEN 1 ELSE 0 END) AS derrotas,
+    SUM(CASE 
+        WHEN (p.id_jugador_blancas = j.id_jugador AND p.resultado = '1-0') 
+             OR (p.id_jugador_negras = j.id_jugador AND p.resultado = '0-1') 
+        THEN 1
+        WHEN p.resultado = '1/2' THEN 0.5
+        ELSE 0
+    END) AS puntos
+FROM 
+    jugadores j
+INNER JOIN 
+    equipos e ON j.id_equipo = e.id_equipo
+INNER JOIN 
+    torneo_equipos te ON e.id_equipo = te.id_equipo
+LEFT JOIN  -- LEFT para incluir jugadores sin partidas (puntos 0)
+    partidas p ON (p.id_jugador_blancas = j.id_jugador OR p.id_jugador_negras = j.id_jugador)
+LEFT JOIN 
+    emparejamientos em ON p.id_emparejamiento = em.id_emparejamiento
+LEFT JOIN 
+    rondas r ON em.id_ronda = r.id_ronda
+WHERE 
+    te.id_torneo = ?  -- Parámetro: id_torneo
+    AND (r.id_torneo = te.id_torneo OR r.id_torneo IS NULL)  -- Filtra partidas del torneo; permite jugadores sin partidas
+    AND j.activo = 1  -- Solo jugadores activos
+    AND te.retirado = 0  -- Equipos no retirados
+GROUP BY 
+    j.id_jugador, e.nombre, j.rating  -- Agrupa por jugador único
+ORDER BY 
+    puntos DESC, j.rating DESC;  -- Orden para clasificación
         ");
         $stmt->execute([$id_torneo]);
         return $stmt->fetchAll();
