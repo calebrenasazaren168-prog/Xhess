@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-4">
-                <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/chess-knight.svg"
+                <img src="img/logo.png"
                      alt="XHESS Logo" class="footer-logo">
                 <h5>XHESS</h5>
                 <p class="text-muted">

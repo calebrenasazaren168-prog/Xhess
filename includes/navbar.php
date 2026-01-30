@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="index.php">
-                    <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/chess-knight.svg" 
+                    <img src="img/logo.png" 
                          alt="XHESS Logo" class="navbar-logo">
                     XHESS
                 </a>
