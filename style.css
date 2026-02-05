@@ -1,6 +1,7 @@
 .inicio-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background:linear-gradient(135deg, #77e9f8fd 10%, #56ce46 90%) ;
             color: white;
+
             padding: 100px 0;
 }
 .card-hover {
@@ -172,3 +173,8 @@ body {
             flex-direction: column;
             position: relative;
         }
+
+.btn-inicio{
+    background-color: #ffffff;
+    color: #7a7a7a;
+    }

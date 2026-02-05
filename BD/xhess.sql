@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-11-2025 a las 07:05:48
+-- Tiempo de generación: 23-01-2026 a las 02:46:01
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -95,7 +95,8 @@ INSERT INTO `cuentas` (`id_cuenta`, `usuario`, `contrasena`, `id_rol`, `correo`,
 (7, 'pablo', '$2y$10$kLeccG76mYFYVnB.sXbffOzJ7V8FCLB/7vpTq7i.Jy9NxqCX8cPrK', 3, 'pablo@gmail.com', 1, '2025-11-26 05:06:07', NULL, NULL, '2025-11-26 05:06:07', NULL, 0, NULL),
 (8, 'bugs', '$2y$10$dMF1CF8AW0eeiunceRqyOOoLMu4Tcp.CG19bQImx.1aUb.6mBdprS', 3, 'bugs@gmail.com', 1, '2025-11-26 05:07:30', NULL, NULL, '2025-11-26 05:07:30', NULL, 0, NULL),
 (9, 'porky', '$2y$10$wmFMsvkWiObQcUgXPFlpduTz888dRg0q2aiWuOE2oDFNk79CSNj3G', 3, 'porky@gmail.com', 1, '2025-11-26 05:09:09', NULL, NULL, '2025-11-26 05:09:09', NULL, 0, NULL),
-(10, 'daffy', '$2y$10$9CPgPmXibfOB56.xHqJXDu1JxwzVgBjVoQ5CWahiDYQinIrD2PsBO', 3, 'daffy@gmail.com', 1, '2025-11-26 23:03:20', NULL, NULL, '2025-11-26 23:03:20', NULL, 0, NULL);
+(10, 'daffy', '$2y$10$9CPgPmXibfOB56.xHqJXDu1JxwzVgBjVoQ5CWahiDYQinIrD2PsBO', 3, 'daffy@gmail.com', 1, '2025-11-26 23:03:20', NULL, NULL, '2025-11-26 23:03:20', NULL, 0, NULL),
+(11, '4x3l_MT', '$2y$10$y6x504rEvkNqam78.F/uLualva1sHXyNQzXHgAQJ9H/MS/JoPzQsi', 3, 'axelalcala45@gmail.com', 1, '2026-01-22 19:24:05', NULL, NULL, '2026-01-22 19:24:05', NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -112,6 +113,15 @@ CREATE TABLE `emparejamientos` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `emparejamientos`
+--
+
+INSERT INTO `emparejamientos` (`id_emparejamiento`, `id_ronda`, `equipo_blancas`, `equipo_negras`, `es_bye`, `created_at`, `updated_at`) VALUES
+(1, 1, 5, 4, 0, '2026-01-22 19:24:47', NULL),
+(2, 2, 3, 5, 0, '2026-01-22 19:25:18', NULL),
+(3, 3, 4, 3, 0, '2026-01-22 19:25:49', NULL);
 
 -- --------------------------------------------------------
 
@@ -204,15 +214,16 @@ CREATE TABLE `jugadores` (
 
 INSERT INTO `jugadores` (`id_jugador`, `nombre`, `apellido`, `rating`, `id_equipo`, `id_cuenta`, `fecha_nacimiento`, `sexo`, `avatar_url`, `activo`, `created_at`, `updated_at`) VALUES
 (1, 'caleb', 'arenas', 1200, NULL, 1, NULL, NULL, NULL, 1, '2025-11-26 04:41:59', NULL),
-(2, 'yakko', 'animaniac', 1200, 3, 2, NULL, NULL, NULL, 1, '2025-11-26 04:46:52', '2025-11-26 04:54:55'),
-(3, 'wakko', 'animaniac', 1200, 3, 3, NULL, NULL, NULL, 1, '2025-11-26 04:56:00', '2025-11-26 04:56:43'),
-(4, 'dot', 'animaniac', 1200, 3, 4, NULL, NULL, NULL, 1, '2025-11-26 04:57:42', '2025-11-26 04:58:10'),
-(5, 'uniqua', 'butterfly', 1200, 4, 5, NULL, NULL, NULL, 1, '2025-11-26 05:02:45', '2025-11-26 05:03:27'),
-(6, 'Tyron', 'moose', 1200, 4, 6, NULL, NULL, NULL, 1, '2025-11-26 05:05:00', '2025-11-26 05:05:08'),
-(7, 'pablo', 'alfonso', 1200, 4, 7, NULL, NULL, NULL, 1, '2025-11-26 05:06:07', '2025-11-26 05:06:18'),
-(8, 'Bugs', 'Bunny', 1200, 5, 8, NULL, NULL, NULL, 1, '2025-11-26 05:07:30', '2025-11-26 05:10:54'),
-(9, 'porky', 'pig', 1200, 5, 9, NULL, NULL, NULL, 1, '2025-11-26 05:09:09', '2025-11-26 05:10:18'),
-(10, 'Daffy', 'duck', 1200, 5, 10, NULL, NULL, NULL, 1, '2025-11-26 23:03:20', '2025-11-27 00:03:00');
+(2, 'yakko', 'animaniac', 1169, 3, 2, NULL, NULL, NULL, 1, '2025-11-26 04:46:52', '2026-01-22 19:45:42'),
+(3, 'wakko', 'animaniac', 1169, 3, 3, NULL, NULL, NULL, 1, '2025-11-26 04:56:00', '2026-01-22 19:45:42'),
+(4, 'dot', 'animaniac', 1169, 3, 4, NULL, NULL, NULL, 1, '2025-11-26 04:57:42', '2026-01-22 19:45:42'),
+(5, 'uniqua', 'butterfly', 1232, 4, 5, NULL, NULL, NULL, 1, '2025-11-26 05:02:45', '2026-01-22 19:45:42'),
+(6, 'Tyron', 'moose', 1232, 4, 6, NULL, NULL, NULL, 1, '2025-11-26 05:05:00', '2026-01-22 19:45:42'),
+(7, 'pablo', 'alfonso', 1232, 4, 7, NULL, NULL, NULL, 1, '2025-11-26 05:06:07', '2026-01-22 19:45:42'),
+(8, 'Bugs', 'Bunny', 1199, 5, 8, NULL, NULL, NULL, 1, '2025-11-26 05:07:30', '2026-01-22 19:25:26'),
+(9, 'porky', 'pig', 1199, 5, 9, NULL, NULL, NULL, 1, '2025-11-26 05:09:09', '2026-01-22 19:25:26'),
+(10, 'Daffy', 'duck', 1199, 5, 10, NULL, NULL, NULL, 1, '2025-11-26 23:03:20', '2026-01-22 19:25:26'),
+(11, 'Axel', 'Alcala', 1200, NULL, 11, NULL, NULL, NULL, 1, '2026-01-22 19:24:05', NULL);
 
 -- --------------------------------------------------------
 
@@ -233,6 +244,21 @@ CREATE TABLE `partidas` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `partidas`
+--
+
+INSERT INTO `partidas` (`id_partida`, `id_emparejamiento`, `tablero`, `id_jugador_blancas`, `id_jugador_negras`, `fecha_partida`, `resultado`, `comentarios`, `pgn`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 8, 5, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
+(2, 1, 2, 9, 6, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
+(3, 1, 3, 10, 7, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
+(4, 2, 1, 2, 8, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
+(5, 2, 2, 3, 9, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
+(6, 2, 3, 4, 10, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
+(7, 3, 1, 5, 2, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:52'),
+(8, 3, 2, 6, 3, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:53'),
+(9, 3, 3, 7, 4, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:53');
 
 -- --------------------------------------------------------
 
@@ -288,6 +314,15 @@ CREATE TABLE `rondas` (
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `rondas`
+--
+
+INSERT INTO `rondas` (`id_ronda`, `id_torneo`, `numero_ronda`, `fecha_ronda`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '2026-01-23', '2026-01-22 19:24:47', NULL),
+(2, 1, 2, '2026-01-24', '2026-01-22 19:25:18', NULL),
+(3, 1, 3, '2026-01-25', '2026-01-22 19:25:49', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -315,6 +350,13 @@ CREATE TABLE `torneos` (
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `torneos`
+--
+
+INSERT INTO `torneos` (`id_torneo`, `nombre`, `descripcion`, `tipo`, `sistema`, `condicion`, `nro_tableros`, `fecha_inicio`, `fecha_fin`, `ubicacion`, `ciudad`, `provincia`, `pais`, `id_cuenta`, `ritmo_tiempo`, `id_club`, `created_at`, `updated_at`) VALUES
+(1, 'prueba', '', 'equipos', 'round_robin_ponderado', 'en_progreso', 4, '2026-01-23', '2026-01-26', 'Biblioteca', NULL, NULL, 'México', 11, '60+30', 1, '2026-01-22 19:24:25', '2026-01-22 19:24:25');
+
 -- --------------------------------------------------------
 
 --
@@ -328,18 +370,14 @@ CREATE TABLE `torneo_equipos` (
   `retirado` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `torneo_jugadores`
+-- Volcado de datos para la tabla `torneo_equipos`
 --
 
-CREATE TABLE `torneo_jugadores` (
-  `id_torneo` int(11) NOT NULL,
-  `id_jugador` int(11) NOT NULL,
-  `id_equipo` int(11) DEFAULT NULL,
-  `rating_inicial` int(11) DEFAULT 1200
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `torneo_equipos` (`id_torneo`, `id_equipo`, `nro_jugadores_equipo`, `retirado`) VALUES
+(1, 3, 4, 0),
+(1, 4, 4, 0),
+(1, 5, 4, 0);
 
 --
 -- Índices para tablas volcadas
@@ -462,14 +500,6 @@ ALTER TABLE `torneo_equipos`
   ADD KEY `idx_te_equipo` (`id_equipo`);
 
 --
--- Indices de la tabla `torneo_jugadores`
---
-ALTER TABLE `torneo_jugadores`
-  ADD PRIMARY KEY (`id_torneo`,`id_jugador`),
-  ADD KEY `idx_tj_torneo` (`id_torneo`),
-  ADD KEY `idx_tj_jugador` (`id_jugador`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -489,13 +519,13 @@ ALTER TABLE `clubes`
 -- AUTO_INCREMENT de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
-  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `emparejamientos`
 --
 ALTER TABLE `emparejamientos`
-  MODIFY `id_emparejamiento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_emparejamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
@@ -519,13 +549,13 @@ ALTER TABLE `estadisticas_jugador`
 -- AUTO_INCREMENT de la tabla `jugadores`
 --
 ALTER TABLE `jugadores`
-  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `partidas`
 --
 ALTER TABLE `partidas`
-  MODIFY `id_partida` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_partida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `puntuaciones_jugador_ronda`
@@ -543,13 +573,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `rondas`
 --
 ALTER TABLE `rondas`
-  MODIFY `id_ronda` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ronda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `torneos`
 --
 ALTER TABLE `torneos`
-  MODIFY `id_torneo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_torneo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -638,13 +668,6 @@ ALTER TABLE `torneos`
 ALTER TABLE `torneo_equipos`
   ADD CONSTRAINT `fk_te_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_te_torneo` FOREIGN KEY (`id_torneo`) REFERENCES `torneos` (`id_torneo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `torneo_jugadores`
---
-ALTER TABLE `torneo_jugadores`
-  ADD CONSTRAINT `fk_tj_jugador` FOREIGN KEY (`id_jugador`) REFERENCES `jugadores` (`id_jugador`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_tj_torneo` FOREIGN KEY (`id_torneo`) REFERENCES `torneos` (`id_torneo`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

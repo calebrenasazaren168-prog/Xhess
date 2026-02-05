@@ -67,8 +67,13 @@ function confirmarAccion(mensaje, formElement) {
 }
 
 function confirmarEnvio(formId, mensaje) {
+    const form = document.getElementById(formId);
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
     if (confirm(mensaje)) {
-        document.getElementById(formId).submit();
+        form.submit();
     }
 }
 
@@ -85,5 +90,33 @@ function seleccionarResultado(idPartida, resultado, boton) {
 function confirmarEnvioFormResultados(form) {
     if (confirm('¿Estás seguro de que quieres guardar todos los cambios de resultados?')) {
         form.submit();
+    }
+}
+
+function seleccionarRonda(select, idTorneo) {
+    // Obtener todas las rondas del torneo específico
+    const rondas = document.querySelectorAll('[id^="ronda-detalle-"]');
+    
+    // Ocultar todas las rondas
+    rondas.forEach(r => {
+        r.style.display = 'none';
+    });
+    
+    const selectedValue = select.value;
+    
+    if (selectedValue === '') {
+        // Si se selecciona "Ver todas", mostrar todas las rondas
+        rondas.forEach(r => {
+            r.style.display = 'block';
+        });
+    } else {
+        // Mostrar solo la ronda seleccionada
+        const selectedRonda = document.getElementById(selectedValue);
+        if (selectedRonda) {
+            selectedRonda.style.display = 'block';
+            
+            // Scroll suave hacia la ronda seleccionada
+            selectedRonda.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 }
