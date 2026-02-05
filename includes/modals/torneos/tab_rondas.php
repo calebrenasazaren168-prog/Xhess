@@ -53,11 +53,17 @@ $rondasTorneo = $sistema->getRondasTorneo($torneo['id_torneo']);
 if (empty($rondasTorneo)): ?>
     <p class="text-muted">No hay rondas generadas para este torneo.</p>
 <?php else: ?>
-    <?php foreach ($rondasTorneo as $ronda): ?>
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="mb-0">Ronda <?= $ronda['numero_ronda'] ?> - <?= date('d/m/Y', strtotime($ronda['fecha_ronda'])) ?></h6>
-                <span class="badge bg-info"><?= $ronda['partidas_jugadas'] ?> partidas</span>
+    <!-- Incluir Selector de Rondas -->
+    <?php include 'selector_ronda.php'; ?>
+    
+    <?php foreach ($rondasTorneo as $index => $ronda): ?>
+        <div class="card mb-3" id="ronda-detalle-<?= $ronda['id_ronda'] ?>" style="display: <?= $index === 0 ? 'block' : 'none' ?>;">
+            <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                <h6 class="mb-0">
+                    <i class="fas fa-chess-board me-2 text-success"></i>
+                    Ronda <?= $ronda['numero_ronda'] ?> - <?= date('d/m/Y', strtotime($ronda['fecha_ronda'])) ?>
+                </h6>
+                <span class="badge bg-info"><?= $ronda['partidas_jugadas'] ?> partida<?= $ronda['partidas_jugadas'] != 1 ? 's' : '' ?></span>
             </div>
             <div class="card-body">
                 <?php 
@@ -68,8 +74,8 @@ if (empty($rondasTorneo)): ?>
                     <form method="post" class="form-resultados" data-ronda="<?= $ronda['id_ronda'] ?>">
                         <input type="hidden" name="action" value="actualizar_multiples_resultados">
                         <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
+                            <table class="table table-sm table-hover">
+                                <thead class="table-light">
                                     <tr>
                                         <th>Tablero</th>
                                         <th>Blancas</th>
