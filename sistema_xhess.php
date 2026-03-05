@@ -257,6 +257,23 @@ class XhessSystem {
         $calc = new RatingCalculator();
         return $calc->actualizar($id_jugador, $resultado, $rating_oponente);
     }
+
+    public function getSolicitudesJugador($id_jugador) {
+        return $this->equipo->obtenerSolicitudesJugador($id_jugador);
+    }
+
+    public function getSolicitudesEquipo($id_equipo) {
+        return $this->equipo->obtenerTodasSolicitudes($id_equipo);
+    }
+
+    public function getEquiposCapitan($id_cuenta) {
+        return $this->equipo->obtenerEquiposCapitan($id_cuenta);
+    }
+
+    public function contarSolicitudesPendientes($id_cuenta) {
+        return $this->equipo->contarSolicitudesPendientesCapitan($id_cuenta);
+    }
+
 }
 
 $sistema = new XhessSystem();

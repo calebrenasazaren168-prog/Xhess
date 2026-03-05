@@ -26,7 +26,23 @@
                         
                         <?php if ($sistema->isJugador()): ?>
                             <a class="nav-link" href="#mi-equipo" data-bs-toggle="modal">Mi Equipo</a>
+                            <?php 
+                            // Mostrar enlace a solicitudes solo si el jugador es capitán de algún equipo
+                            $equipos_capitan = $sistema->getEquiposCapitan($_SESSION['user_id']);
+                            if (!empty($equipos_capitan)):
+                                $pendientes = array_sum(array_column($equipos_capitan, 'solicitudes_pendientes'));
+                            ?>
+                                <a class="nav-link position-relative" href="#modal-solicitudes-equipo" data-bs-toggle="modal">
+                                    Solicitudes de Equipo
+                                    <?php if ($pendientes > 0): ?>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem">
+                                            <?= $pendientes ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            <?php endif; ?>
                         <?php endif; ?>
+
                         
                         <a class="nav-link" href="#mis-torneos" data-bs-toggle="modal">Mis Torneos</a>
                         <a class="nav-link" href="#crear-torneo" data-bs-toggle="modal">Crear Torneo</a>
