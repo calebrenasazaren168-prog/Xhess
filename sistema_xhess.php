@@ -274,6 +274,31 @@ class XhessSystem {
         return $this->equipo->contarSolicitudesPendientesCapitan($id_cuenta);
     }
 
+    // ── SOLICITUDES DE TORNEO ─────────────────────────────────────────────────
+
+    public function getSolicitudesTorneoPendientes($id_torneo) {
+        return $this->torneo->obtenerSolicitudesPendientes($id_torneo);
+    }
+
+    public function getSolicitudesTorneoTodas($id_torneo) {
+        return $this->torneo->obtenerTodasSolicitudes($id_torneo);
+    }
+
+    public function contarSolicitudesTorneoPendientes($id_cuenta) {
+        return $this->torneo->contarSolicitudesPendientesOrganizador($id_cuenta);
+    }
+
+    public function getEstadoSolicitudTorneo($id_torneo, $id_equipo) {
+        return $this->torneo->obtenerEstadoSolicitud($id_torneo, $id_equipo);
+    }
+
+    public function getEquipoDelLider($id_cuenta) {
+        $pdo = Database::getInstance()->getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM equipos WHERE id_creador = ? LIMIT 1");
+        $stmt->execute([$id_cuenta]);
+        return $stmt->fetch();
+    }
+
 }
 
 $sistema = new XhessSystem();
