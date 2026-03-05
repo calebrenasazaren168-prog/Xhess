@@ -117,6 +117,8 @@ require_once 'sistema_xhess.php';
         
         <?php include 'includes/modals/modal_Admin.php'; ?>
 
+        <?php include 'includes/modals/modal_SolicitudesEquipo.php'; ?>
+
         <?php endif; ?>
         
         <?php include 'includes/modals/modal_VerClasificacion.php'; ?>

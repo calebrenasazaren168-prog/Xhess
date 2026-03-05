@@ -37,13 +37,45 @@ class ActionHandler {
                     $this->auth->logout();
                     return ['redirect' => 'index.php'];
 
-                case 'unirse_equipo':
+                // ── SOLICITUDES ──────────────────────────────────────────────
+                case 'solicitar_equipo':
                     if (!$this->auth->isLoggedIn() || !$this->auth->isJugador()) {
                         throw new Exception("No autorizado");
                     }
-                    $this->jugador->unirseAEquipo($this->auth->getJugadorId(), $post['id_equipo']);
-                    $this->success = "Te has unido al equipo exitosamente";
+                    $mensaje = trim($post['mensaje'] ?? '');
+                    $this->equipo->solicitarIngreso(
+                        $this->auth->getJugadorId(),
+                        $post['id_equipo'],
+                        $mensaje
+                    );
+                    $this->success = "Solicitud enviada exitosamente. El capitán del equipo la revisará pronto.";
                     break;
+
+                case 'aceptar_solicitud':
+                    if (!$this->auth->isLoggedIn()) {
+                        throw new Exception("No autorizado");
+                    }
+                    $this->equipo->aceptarSolicitud($post['id_solicitud'], $this->auth->getUserId());
+                    $this->success = "Solicitud aceptada. El jugador ha sido agregado al equipo.";
+                    break;
+
+                case 'rechazar_solicitud':
+                    if (!$this->auth->isLoggedIn()) {
+                        throw new Exception("No autorizado");
+                    }
+                    $this->equipo->rechazarSolicitud($post['id_solicitud'], $this->auth->getUserId());
+                    $this->success = "Solicitud rechazada.";
+                    break;
+
+                case 'cancelar_solicitud':
+                    if (!$this->auth->isLoggedIn() || !$this->auth->isJugador()) {
+                        throw new Exception("No autorizado");
+                    }
+                    $this->equipo->cancelarSolicitud($post['id_solicitud'], $this->auth->getJugadorId());
+                    $this->success = "Solicitud cancelada.";
+                    break;
+
+                // ────────────────────────────────────────────────────────────
                     
                 case 'salirse_equipo':
                     if (!$this->auth->isLoggedIn() || !$this->auth->isJugador()) {
