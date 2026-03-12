@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-01-2026 a las 02:46:01
+-- Tiempo de generación: 05-03-2026 a las 05:10:44
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -86,7 +86,6 @@ CREATE TABLE `cuentas` (
 --
 
 INSERT INTO `cuentas` (`id_cuenta`, `usuario`, `contrasena`, `id_rol`, `correo`, `activo`, `fecha_creacion`, `ultimo_login`, `avatar_url`, `created_at`, `updated_at`, `verified`, `verification_token`) VALUES
-(1, 'caleb', '$2y$10$pTOZVrnzZlmKFNseJgOo7.vMfrCqPEF1HowQ0h.mh.VJkHRkPfDvi', 1, 'caleb@gmail.com', 1, '2025-11-26 04:41:59', NULL, NULL, '2025-11-26 04:41:59', '2025-11-26 21:52:34', 0, NULL),
 (2, 'yakko', '$2y$10$AKubGymomBiAkCXVtawvh.mcXKsSxlTGFCBVZY/mnUCnKtmBv.oJu', 3, 'yakko@gmail.com', 1, '2025-11-26 04:46:52', NULL, NULL, '2025-11-26 04:46:52', NULL, 0, NULL),
 (3, 'wakko', '$2y$10$Nypj.hPc1g2ERZqC3tnwouOmaNslPKguq8uCw3dCCihvnWMfR/EFe', 3, 'wakko@gmail.com', 1, '2025-11-26 04:56:00', NULL, NULL, '2025-11-26 04:56:00', '2025-11-26 04:56:32', 0, NULL),
 (4, 'dot', '$2y$10$A9A9mj6hQUAeRcksR/I9MOOCCBkx9Wuiy2udEYI6q./JI425hUafa', 3, 'dot@gmail.com', 1, '2025-11-26 04:57:42', NULL, NULL, '2025-11-26 04:57:42', NULL, 0, NULL),
@@ -96,7 +95,8 @@ INSERT INTO `cuentas` (`id_cuenta`, `usuario`, `contrasena`, `id_rol`, `correo`,
 (8, 'bugs', '$2y$10$dMF1CF8AW0eeiunceRqyOOoLMu4Tcp.CG19bQImx.1aUb.6mBdprS', 3, 'bugs@gmail.com', 1, '2025-11-26 05:07:30', NULL, NULL, '2025-11-26 05:07:30', NULL, 0, NULL),
 (9, 'porky', '$2y$10$wmFMsvkWiObQcUgXPFlpduTz888dRg0q2aiWuOE2oDFNk79CSNj3G', 3, 'porky@gmail.com', 1, '2025-11-26 05:09:09', NULL, NULL, '2025-11-26 05:09:09', NULL, 0, NULL),
 (10, 'daffy', '$2y$10$9CPgPmXibfOB56.xHqJXDu1JxwzVgBjVoQ5CWahiDYQinIrD2PsBO', 3, 'daffy@gmail.com', 1, '2025-11-26 23:03:20', NULL, NULL, '2025-11-26 23:03:20', NULL, 0, NULL),
-(11, '4x3l_MT', '$2y$10$y6x504rEvkNqam78.F/uLualva1sHXyNQzXHgAQJ9H/MS/JoPzQsi', 3, 'axelalcala45@gmail.com', 1, '2026-01-22 19:24:05', NULL, NULL, '2026-01-22 19:24:05', NULL, 0, NULL);
+(11, '4x3l_MT', '$2y$10$y6x504rEvkNqam78.F/uLualva1sHXyNQzXHgAQJ9H/MS/JoPzQsi', 3, 'axelalcala45@gmail.com', 1, '2026-01-22 19:24:05', NULL, NULL, '2026-01-22 19:24:05', NULL, 0, NULL),
+(12, 'caleb', '$2y$10$cWHw7qcO9HB7XHqir60Le.fXYnPwquWUwLyHAJLOhzUNyMDYTeOTO', 3, 'calebejemplo@gmail.com', 1, '2026-03-04 21:53:47', NULL, NULL, '2026-03-04 21:53:47', NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -148,7 +148,8 @@ CREATE TABLE `equipos` (
 INSERT INTO `equipos` (`id_equipo`, `nombre`, `id_club`, `id_coach`, `id_creador`, `avatar_url`, `created_at`, `updated_at`, `es_capitan`) VALUES
 (3, 'Animaniacos', 1, 2, 2, NULL, '2025-11-26 04:54:55', '2025-11-26 21:34:48', 1),
 (4, 'Backyardigans', 1, 5, 5, NULL, '2025-11-26 05:03:27', '2025-11-26 21:34:48', 1),
-(5, 'Los Looney Tunes', 1, 9, 9, NULL, '2025-11-26 05:10:18', '2025-11-26 21:34:48', 1);
+(5, 'Los Looney Tunes', 1, 9, 9, NULL, '2025-11-26 05:10:18', '2025-11-26 21:34:48', 1),
+(7, 'prueba', 1, 11, 11, NULL, '2026-03-04 21:52:59', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -223,7 +224,8 @@ INSERT INTO `jugadores` (`id_jugador`, `nombre`, `apellido`, `rating`, `id_equip
 (8, 'Bugs', 'Bunny', 1199, 5, 8, NULL, NULL, NULL, 1, '2025-11-26 05:07:30', '2026-01-22 19:25:26'),
 (9, 'porky', 'pig', 1199, 5, 9, NULL, NULL, NULL, 1, '2025-11-26 05:09:09', '2026-01-22 19:25:26'),
 (10, 'Daffy', 'duck', 1199, 5, 10, NULL, NULL, NULL, 1, '2025-11-26 23:03:20', '2026-01-22 19:25:26'),
-(11, 'Axel', 'Alcala', 1200, NULL, 11, NULL, NULL, NULL, 1, '2026-01-22 19:24:05', NULL);
+(11, 'Axel', 'Alcala', 1200, 7, 11, NULL, NULL, NULL, 1, '2026-01-22 19:24:05', '2026-03-04 21:52:59'),
+(12, 'Caleb', 'Arenas', 1200, 7, 12, NULL, NULL, NULL, 1, '2026-03-04 21:53:47', '2026-03-04 21:57:41');
 
 -- --------------------------------------------------------
 
@@ -326,6 +328,29 @@ INSERT INTO `rondas` (`id_ronda`, `id_torneo`, `numero_ronda`, `fecha_ronda`, `c
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `solicitudes_equipo`
+--
+
+CREATE TABLE `solicitudes_equipo` (
+  `id_solicitud` int(11) NOT NULL,
+  `id_jugador` int(11) NOT NULL,
+  `id_equipo` int(11) NOT NULL,
+  `estado` enum('pendiente','aceptada','rechazada') DEFAULT 'pendiente',
+  `mensaje` varchar(255) DEFAULT NULL,
+  `fecha_solicitud` datetime DEFAULT current_timestamp(),
+  `fecha_respuesta` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `solicitudes_equipo`
+--
+
+INSERT INTO `solicitudes_equipo` (`id_solicitud`, `id_jugador`, `id_equipo`, `estado`, `mensaje`, `fecha_solicitud`, `fecha_respuesta`) VALUES
+(1, 12, 7, 'aceptada', 'aceptenme prros', '2026-03-04 21:54:15', '2026-03-04 21:57:41');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `torneos`
 --
 
@@ -355,7 +380,7 @@ CREATE TABLE `torneos` (
 --
 
 INSERT INTO `torneos` (`id_torneo`, `nombre`, `descripcion`, `tipo`, `sistema`, `condicion`, `nro_tableros`, `fecha_inicio`, `fecha_fin`, `ubicacion`, `ciudad`, `provincia`, `pais`, `id_cuenta`, `ritmo_tiempo`, `id_club`, `created_at`, `updated_at`) VALUES
-(1, 'prueba', '', 'equipos', 'round_robin_ponderado', 'en_progreso', 4, '2026-01-23', '2026-01-26', 'Biblioteca', NULL, NULL, 'México', 11, '60+30', 1, '2026-01-22 19:24:25', '2026-01-22 19:24:25');
+(1, 'prueba', '', 'equipos', 'round_robin_ponderado', 'finalizado', 4, '2026-01-23', '2026-01-26', 'Biblioteca', NULL, NULL, 'México', 11, '60+30', 1, '2026-01-22 19:24:25', '2026-03-04 21:52:02');
 
 -- --------------------------------------------------------
 
@@ -483,6 +508,15 @@ ALTER TABLE `rondas`
   ADD KEY `idx_rondas_torneo` (`id_torneo`);
 
 --
+-- Indices de la tabla `solicitudes_equipo`
+--
+ALTER TABLE `solicitudes_equipo`
+  ADD PRIMARY KEY (`id_solicitud`),
+  ADD UNIQUE KEY `uk_solicitud_jugador_equipo` (`id_jugador`,`id_equipo`,`estado`),
+  ADD KEY `idx_sol_equipo` (`id_equipo`),
+  ADD KEY `idx_sol_jugador` (`id_jugador`);
+
+--
 -- Indices de la tabla `torneos`
 --
 ALTER TABLE `torneos`
@@ -519,7 +553,7 @@ ALTER TABLE `clubes`
 -- AUTO_INCREMENT de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
-  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `emparejamientos`
@@ -531,7 +565,7 @@ ALTER TABLE `emparejamientos`
 -- AUTO_INCREMENT de la tabla `equipos`
 --
 ALTER TABLE `equipos`
-  MODIFY `id_equipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_equipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `estadisticas_equipo`
@@ -549,7 +583,7 @@ ALTER TABLE `estadisticas_jugador`
 -- AUTO_INCREMENT de la tabla `jugadores`
 --
 ALTER TABLE `jugadores`
-  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `partidas`
@@ -574,6 +608,12 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `rondas`
   MODIFY `id_ronda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `solicitudes_equipo`
+--
+ALTER TABLE `solicitudes_equipo`
+  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `torneos`
@@ -654,6 +694,13 @@ ALTER TABLE `puntuaciones_jugador_ronda`
 --
 ALTER TABLE `rondas`
   ADD CONSTRAINT `fk_rondas_torneo` FOREIGN KEY (`id_torneo`) REFERENCES `torneos` (`id_torneo`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `solicitudes_equipo`
+--
+ALTER TABLE `solicitudes_equipo`
+  ADD CONSTRAINT `fk_sol_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_sol_jugador` FOREIGN KEY (`id_jugador`) REFERENCES `jugadores` (`id_jugador`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `torneos`
