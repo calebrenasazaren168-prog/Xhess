@@ -12,22 +12,16 @@ class TorneoManager {
     }
     
     public function crear($datos) {
-        $min = max(1, (int)($datos['min_jugadores'] ?? 3));
-        $max = max($min, (int)($datos['max_jugadores'] ?? 6));
-
         $stmt = $this->pdo->prepare("
-            INSERT INTO torneos (nombre, descripcion, tipo, sistema, nro_tableros,
-                                min_jugadores, max_jugadores,
+            INSERT INTO torneos (nombre, descripcion, tipo, sistema, nro_tableros, 
                                 fecha_inicio, fecha_fin, ubicacion, ritmo_tiempo, id_club, id_cuenta) 
-            VALUES (?, ?, 'equipos', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, 'equipos', ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         return $stmt->execute([
             $datos['nombre'],
             $datos['descripcion'] ?? '',
             $datos['sistema'] ?? 'round_robin',
             $datos['nro_tableros'] ?? 4,
-            $min,
-            $max,
             $datos['fecha_inicio'],
             $datos['fecha_fin'],
             $datos['ubicacion'] ?? '',
@@ -57,7 +51,7 @@ class TorneoManager {
             $stmt = $this->pdo->prepare("DELETE FROM torneo_equipos WHERE id_torneo = ?");
             $stmt->execute([$id_torneo]);
             
-            $stmt = $this->pdo->prepare("DELETE FROM torneo_jugadores WHERE id_torneo = ?");
+            $stmt = $this->pdo->prepare("DELETE FROM torneos WHERE id_torneo = ?");
             $stmt->execute([$id_torneo]);
             
             $stmt = $this->pdo->prepare("DELETE FROM torneos WHERE id_torneo = ?");
@@ -350,200 +344,5 @@ ORDER BY
         $stmt = $this->pdo->prepare("SELECT id_torneo FROM torneos WHERE id_torneo = ? AND id_cuenta = ?");
         $stmt->execute([$id_torneo, $id_cuenta]);
         return $stmt->fetch() !== false;
-    }
-
-    // ─── SOLICITUDES DE EQUIPOS PARA TORNEO ────────────────────────────────────
-
-    /**
-     * El líder de equipo solicita unirse a un torneo.
-     * Valida que el equipo tenga jugadores dentro del rango min-max del torneo.
-     */
-    public function solicitarUnirse($id_torneo, $id_equipo, $id_cuenta_lider, $mensaje = '') {
-        // Obtener torneo
-        $stmt = $this->pdo->prepare("SELECT * FROM torneos WHERE id_torneo = ?");
-        $stmt->execute([$id_torneo]);
-        $torneo = $stmt->fetch();
-        if (!$torneo) throw new Exception("Torneo no encontrado.");
-
-        if ($torneo['condicion'] === 'finalizado') {
-            throw new Exception("No puedes solicitar unirte a un torneo finalizado.");
-        }
-
-        // Verificar que el usuario es líder/creador del equipo
-        $stmt = $this->pdo->prepare("SELECT id_equipo FROM equipos WHERE id_equipo = ? AND id_creador = ?");
-        $stmt->execute([$id_equipo, $id_cuenta_lider]);
-        if (!$stmt->fetch()) {
-            throw new Exception("Solo el líder del equipo puede enviar esta solicitud.");
-        }
-
-        // Contar jugadores del equipo
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM jugadores WHERE id_equipo = ? AND activo = 1");
-        $stmt->execute([$id_equipo]);
-        $numJugadores = (int)$stmt->fetch()['total'];
-
-        if ($numJugadores < $torneo['min_jugadores']) {
-            throw new Exception("Tu equipo tiene {$numJugadores} jugadores activos, pero el torneo requiere mínimo {$torneo['min_jugadores']}.");
-        }
-        if ($numJugadores > $torneo['max_jugadores']) {
-            throw new Exception("Tu equipo tiene {$numJugadores} jugadores activos, pero el torneo permite máximo {$torneo['max_jugadores']}.");
-        }
-
-        // ¿Ya está inscrito?
-        $stmt = $this->pdo->prepare("SELECT 1 FROM torneo_equipos WHERE id_torneo = ? AND id_equipo = ?");
-        $stmt->execute([$id_torneo, $id_equipo]);
-        if ($stmt->fetch()) throw new Exception("El equipo ya está inscrito en este torneo.");
-
-        // ¿Ya tiene solicitud pendiente?
-        $stmt = $this->pdo->prepare("
-            SELECT id_solicitud FROM solicitudes_torneo 
-            WHERE id_torneo = ? AND id_equipo = ? AND estado = 'pendiente'
-        ");
-        $stmt->execute([$id_torneo, $id_equipo]);
-        if ($stmt->fetch()) throw new Exception("Ya existe una solicitud pendiente para este torneo.");
-
-        $stmt = $this->pdo->prepare("
-            INSERT INTO solicitudes_torneo (id_torneo, id_equipo, mensaje) VALUES (?, ?, ?)
-        ");
-        return $stmt->execute([$id_torneo, $id_equipo, $mensaje]);
-    }
-
-    /**
-     * Obtener solicitudes pendientes de un torneo (para el organizador).
-     */
-    public function obtenerSolicitudesPendientes($id_torneo) {
-        $stmt = $this->pdo->prepare("
-            SELECT st.*, e.nombre as equipo_nombre, c.nombre as club_nombre,
-                   cu.usuario as lider_usuario,
-                   (SELECT COUNT(*) FROM jugadores j WHERE j.id_equipo = e.id_equipo AND j.activo = 1) as num_jugadores
-            FROM solicitudes_torneo st
-            JOIN equipos e ON st.id_equipo = e.id_equipo
-            JOIN clubes c ON e.id_club = c.id_club
-            JOIN cuentas cu ON e.id_creador = cu.id_cuenta
-            WHERE st.id_torneo = ? AND st.estado = 'pendiente'
-            ORDER BY st.fecha_solicitud ASC
-        ");
-        $stmt->execute([$id_torneo]);
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * Obtener todas las solicitudes de un torneo (historial).
-     */
-    public function obtenerTodasSolicitudes($id_torneo) {
-        $stmt = $this->pdo->prepare("
-            SELECT st.*, e.nombre as equipo_nombre, c.nombre as club_nombre,
-                   cu.usuario as lider_usuario,
-                   (SELECT COUNT(*) FROM jugadores j WHERE j.id_equipo = e.id_equipo AND j.activo = 1) as num_jugadores
-            FROM solicitudes_torneo st
-            JOIN equipos e ON st.id_equipo = e.id_equipo
-            JOIN clubes c ON e.id_club = c.id_club
-            JOIN cuentas cu ON e.id_creador = cu.id_cuenta
-            WHERE st.id_torneo = ?
-            ORDER BY st.fecha_solicitud DESC
-        ");
-        $stmt->execute([$id_torneo]);
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * Aceptar solicitud: inscribe al equipo en el torneo.
-     */
-    public function aceptarSolicitudTorneo($id_solicitud, $id_cuenta_organizador) {
-        $stmt = $this->pdo->prepare("
-            SELECT st.*, t.id_cuenta as organizador
-            FROM solicitudes_torneo st
-            JOIN torneos t ON st.id_torneo = t.id_torneo
-            WHERE st.id_solicitud = ? AND st.estado = 'pendiente'
-        ");
-        $stmt->execute([$id_solicitud]);
-        $sol = $stmt->fetch();
-
-        if (!$sol) throw new Exception("Solicitud no encontrada o ya procesada.");
-        if ($sol['organizador'] != $id_cuenta_organizador) {
-            throw new Exception("No tienes permisos para gestionar esta solicitud.");
-        }
-
-        $this->pdo->beginTransaction();
-        try {
-            $stmt = $this->pdo->prepare("
-                UPDATE solicitudes_torneo SET estado = 'aceptada', fecha_respuesta = NOW()
-                WHERE id_solicitud = ?
-            ");
-            $stmt->execute([$id_solicitud]);
-
-            // Inscribir equipo al torneo
-            $stmt = $this->pdo->prepare("
-                INSERT IGNORE INTO torneo_equipos (id_torneo, id_equipo) VALUES (?, ?)
-            ");
-            $stmt->execute([$sol['id_torneo'], $sol['id_equipo']]);
-
-            $this->pdo->commit();
-        } catch (Exception $e) {
-            $this->pdo->rollBack();
-            throw $e;
-        }
-    }
-
-    /**
-     * Rechazar solicitud.
-     */
-    public function rechazarSolicitudTorneo($id_solicitud, $id_cuenta_organizador) {
-        $stmt = $this->pdo->prepare("
-            SELECT st.*, t.id_cuenta as organizador
-            FROM solicitudes_torneo st
-            JOIN torneos t ON st.id_torneo = t.id_torneo
-            WHERE st.id_solicitud = ? AND st.estado = 'pendiente'
-        ");
-        $stmt->execute([$id_solicitud]);
-        $sol = $stmt->fetch();
-
-        if (!$sol) throw new Exception("Solicitud no encontrada o ya procesada.");
-        if ($sol['organizador'] != $id_cuenta_organizador) {
-            throw new Exception("No tienes permisos para gestionar esta solicitud.");
-        }
-
-        $stmt = $this->pdo->prepare("
-            UPDATE solicitudes_torneo SET estado = 'rechazada', fecha_respuesta = NOW()
-            WHERE id_solicitud = ?
-        ");
-        return $stmt->execute([$id_solicitud]);
-    }
-
-    /**
-     * Cancelar solicitud (por el líder).
-     */
-    public function cancelarSolicitudTorneo($id_solicitud, $id_equipo) {
-        $stmt = $this->pdo->prepare("
-            DELETE FROM solicitudes_torneo 
-            WHERE id_solicitud = ? AND id_equipo = ? AND estado = 'pendiente'
-        ");
-        return $stmt->execute([$id_solicitud, $id_equipo]);
-    }
-
-    /**
-     * Contar solicitudes pendientes de todos los torneos de un organizador.
-     */
-    public function contarSolicitudesPendientesOrganizador($id_cuenta) {
-        $stmt = $this->pdo->prepare("
-            SELECT COUNT(*) as total
-            FROM solicitudes_torneo st
-            JOIN torneos t ON st.id_torneo = t.id_torneo
-            WHERE t.id_cuenta = ? AND st.estado = 'pendiente'
-        ");
-        $stmt->execute([$id_cuenta]);
-        return (int)$stmt->fetch()['total'];
-    }
-
-    /**
-     * Obtener el estado de solicitud de un equipo para un torneo.
-     */
-    public function obtenerEstadoSolicitud($id_torneo, $id_equipo) {
-        $stmt = $this->pdo->prepare("
-            SELECT * FROM solicitudes_torneo 
-            WHERE id_torneo = ? AND id_equipo = ?
-            ORDER BY fecha_solicitud DESC LIMIT 1
-        ");
-        $stmt->execute([$id_torneo, $id_equipo]);
-        return $stmt->fetch();
     }
 }

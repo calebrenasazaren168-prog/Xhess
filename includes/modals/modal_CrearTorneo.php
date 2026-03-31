@@ -39,18 +39,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label"><i class="fas fa-users"></i> Mínimo de Jugadores por Equipo *</label>
-                                    <input type="number" name="min_jugadores" id="ct-min-jugadores" class="form-control" value="3" min="1" max="20" required>
-                                    <small class="text-muted">Equipos con menos jugadores no podrán solicitar unirse.</small>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label"><i class="fas fa-users"></i> Máximo de Jugadores por Equipo *</label>
-                                    <input type="number" name="max_jugadores" id="ct-max-jugadores" class="form-control" value="6" min="1" max="20" required>
-                                    <small class="text-muted">Equipos con más jugadores no podrán solicitar unirse.</small>
-                                </div>
-                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Descripción</label>
                                 <textarea name="descripcion" class="form-control" rows="3" placeholder="Describe tu torneo..."></textarea>
@@ -83,7 +71,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" onclick="return validarCrearTorneo()">
+                            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Crear este torneo?')">
                                 <i class="fas fa-trophy"></i> Crear Torneo
                             </button>
                         </div>
@@ -91,19 +79,3 @@
                 </div>
             </div>
         </div>
-
-<script>
-function validarCrearTorneo() {
-    const min = parseInt(document.getElementById('ct-min-jugadores').value);
-    const max = parseInt(document.getElementById('ct-max-jugadores').value);
-    if (isNaN(min) || isNaN(max) || min < 1 || max < 1) {
-        alert('Los límites de jugadores deben ser números positivos.');
-        return false;
-    }
-    if (min > max) {
-        alert('El mínimo de jugadores no puede ser mayor al máximo.');
-        return false;
-    }
-    return confirm('¿Crear este torneo?');
-}
-</script>

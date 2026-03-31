@@ -193,45 +193,6 @@ class ActionHandler {
                     $this->success = "Torneo eliminado exitosamente";
                     break;
 
-                // ── SOLICITUDES DE TORNEO ─────────────────────────────────────
-                case 'solicitar_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->solicitarUnirse(
-                        $post['id_torneo'],
-                        $post['id_equipo'],
-                        $this->auth->getUserId(),
-                        trim($post['mensaje'] ?? '')
-                    );
-                    $this->success = "Solicitud enviada. El organizador la revisará pronto.";
-                    break;
-
-                case 'aceptar_solicitud_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->aceptarSolicitudTorneo($post['id_solicitud'], $this->auth->getUserId());
-                    $this->success = "Equipo aceptado e inscrito en el torneo.";
-                    break;
-
-                case 'rechazar_solicitud_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->rechazarSolicitudTorneo($post['id_solicitud'], $this->auth->getUserId());
-                    $this->success = "Solicitud rechazada.";
-                    break;
-
-                case 'cancelar_solicitud_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->cancelarSolicitudTorneo($post['id_solicitud'], $post['id_equipo']);
-                    $this->success = "Solicitud cancelada.";
-                    break;
-                // ─────────────────────────────────────────────────────────────
-
                 case 'generar_ronda':
                     if (!$this->auth->isLoggedIn()) {
                         throw new Exception("No autorizado");
