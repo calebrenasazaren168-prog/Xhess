@@ -232,6 +232,9 @@ class ActionHandler {
     
     private function registro($post) {
         $this->auth->registrarUsuario($post);
-        return ['redirect' => 'index.php'];
+        // Mostrar mensaje en lugar de redirigir — el usuario debe verificar su correo primero
+        $correo = htmlspecialchars($post['correo']);
+        $this->success = "¡Registro exitoso! Te enviamos un correo a <strong>{$correo}</strong> con un enlace de verificación. Revisa también tu carpeta de spam.";
+        return ['success' => $this->success];
     }
 }
