@@ -273,6 +273,34 @@ class XhessSystem {
     public function contarSolicitudesPendientes($id_cuenta) {
         return $this->equipo->contarSolicitudesPendientesCapitan($id_cuenta);
     }
+    
+        public function solicitarTorneo($id_torneo, $id_cuenta, $id_equipo, $mensaje = '') {
+        return $this->torneo->solicitarUnirse((int)$id_torneo, (int)$id_cuenta, $id_equipo ? (int)$id_equipo : null, $mensaje);
+    }
+ 
+    public function aceptarSolicitudTorneo($id_solicitud) {
+        return $this->torneo->aceptarSolicitudTorneo((int)$id_solicitud, (int)$_SESSION['user_id'], $this->isAdmin());
+    }
+ 
+    public function rechazarSolicitudTorneo($id_solicitud) {
+        return $this->torneo->rechazarSolicitudTorneo((int)$id_solicitud, (int)$_SESSION['user_id'], $this->isAdmin());
+    }
+ 
+    public function cancelarSolicitudTorneo($id_solicitud) {
+        return $this->torneo->cancelarSolicitudTorneo((int)$id_solicitud, (int)$_SESSION['user_id']);
+    }
+ 
+    public function getSolicitudesTorneo($id_torneo) {
+        return $this->torneo->obtenerSolicitudesTorneo((int)$id_torneo);
+    }
+ 
+    public function getMisSolicitudesTorneos($id_cuenta) {
+        return $this->torneo->obtenerMisSolicitudesTorneos((int)$id_cuenta);
+    }
+ 
+    public function contarSolicitudesPendientesTorneos($id_cuenta) {
+        return $this->torneo->contarSolicitudesPendientesTorneos((int)$id_cuenta);
+    }
 
 }
 

@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <?php 
+                <?php
                 $misTorneos = $sistema->getMisTorneos($_SESSION['user_id']);
                 if (empty($misTorneos)): ?>
                     <div class="col-12 text-center py-5">
@@ -18,8 +18,13 @@
                     <?php include 'includes/modals/torneos/selector_torneo.php'; ?>
 
                     <!-- Contenedor de Torneos -->
-                    <?php foreach ($misTorneos as $index => $torneo): ?>
-                        <div id="torneo-detalle-<?= $torneo['id_torneo'] ?>" class="torneo-detalle" style="display: <?= $index === 0 ? 'block' : 'none' ?>;">
+                    <?php foreach ($misTorneos as $index => $torneo):
+                        // Contar solicitudes pendientes de este torneo
+                        $sols_pendientes_torneo = $sistema->getSolicitudesTorneo($torneo['id_torneo']);
+                        $nro_pendientes_torneo  = count(array_filter($sols_pendientes_torneo, fn($s) => $s['estado'] === 'pendiente'));
+                    ?>
+                        <div id="torneo-detalle-<?= $torneo['id_torneo'] ?>" class="torneo-detalle"
+                             style="display: <?= $index === 0 ? 'block' : 'none' ?>;">
                             <div class="card">
                                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                     <div>
@@ -33,38 +38,61 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-bs-toggle="tab" href="#equipos-<?= $torneo['id_torneo'] ?>">Equipos</a>
+                                            <a class="nav-link active" data-bs-toggle="tab"
+                                               href="#equipos-<?= $torneo['id_torneo'] ?>">Equipos</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#clasificacion-<?= $torneo['id_torneo'] ?>">Clasificación</a>
+                                            <a class="nav-link" data-bs-toggle="tab"
+                                               href="#clasificacion-<?= $torneo['id_torneo'] ?>">Clasificación</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#rondas-<?= $torneo['id_torneo'] ?>">Rondas</a>
+                                            <a class="nav-link" data-bs-toggle="tab"
+                                               href="#rondas-<?= $torneo['id_torneo'] ?>">Rondas</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#emparejamientos-<?= $torneo['id_torneo'] ?>">Emparejamientos</a>
+                                            <a class="nav-link" data-bs-toggle="tab"
+                                               href="#emparejamientos-<?= $torneo['id_torneo'] ?>">Emparejamientos</a>
+                                        </li>
+                                        <!-- ── NUEVA PESTAÑA SOLICITUDES ── -->
+                                        <li class="nav-item">
+                                            <a class="nav-link position-relative" data-bs-toggle="tab"
+                                               href="#solicitudes-<?= $torneo['id_torneo'] ?>">
+                                                <i class="fas fa-envelope me-1"></i>Solicitudes
+                                                <?php if ($nro_pendientes_torneo > 0): ?>
+                                                    <span class="position-absolute top-0 start-100 translate-middle
+                                                                  badge rounded-pill bg-danger"
+                                                          style="font-size:.6rem">
+                                                        <?= $nro_pendientes_torneo ?>
+                                                    </span>
+                                                <?php endif; ?>
+                                            </a>
                                         </li>
                                     </ul>
-                                    
+
                                     <div class="tab-content mt-3">
-                                        <!-- Tab de Equipos -->
+                                        <!-- Tab Equipos -->
                                         <div class="tab-pane fade show active" id="equipos-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_equipos.php'; ?>
                                         </div>
-                                        
-                                        <!-- Tab de Clasificación -->
+
+                                        <!-- Tab Clasificación -->
                                         <div class="tab-pane fade" id="clasificacion-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_clasificacion.php'; ?>
                                         </div>
-                                        
-                                        <!-- Tab de Rondas -->
+
+                                        <!-- Tab Rondas -->
                                         <div class="tab-pane fade" id="rondas-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_rondas.php'; ?>
                                         </div>
-                                        
-                                        <!-- Tab de Emparejamientos -->
+
+                                        <!-- Tab Emparejamientos -->
                                         <div class="tab-pane fade" id="emparejamientos-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_emparejamientos.php'; ?>
+                                        </div>
+
+                                        <!-- ── Tab Solicitudes ── -->
+                                        <div class="tab-pane fade" id="solicitudes-<?= $torneo['id_torneo'] ?>">
+                                            <?php include 'includes/modals/torneos/tab_solicitudes_torneo.php'; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -81,17 +109,15 @@
 function seleccionarTorneo(select) {
     const torneos = document.querySelectorAll('.torneo-detalle');
     torneos.forEach(t => t.style.display = 'none');
-    
+
     const selectedId = select.value;
     if (selectedId) {
         const selectedDiv = document.getElementById(selectedId);
-        if (selectedDiv) {
-            selectedDiv.style.display = 'block';
-        }
+        if (selectedDiv) selectedDiv.style.display = 'block';
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const modalElement = document.getElementById('mis-torneos');
     if (modalElement) {
         modalElement.addEventListener('shown.bs.modal', function () {
