@@ -193,45 +193,6 @@ class ActionHandler {
                     $this->success = "Torneo eliminado exitosamente";
                     break;
 
-                // ── SOLICITUDES DE TORNEO ─────────────────────────────────────
-                case 'solicitar_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->solicitarUnirse(
-                        $post['id_torneo'],
-                        $post['id_equipo'],
-                        $this->auth->getUserId(),
-                        trim($post['mensaje'] ?? '')
-                    );
-                    $this->success = "Solicitud enviada. El organizador la revisará pronto.";
-                    break;
-
-                case 'aceptar_solicitud_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->aceptarSolicitudTorneo($post['id_solicitud'], $this->auth->getUserId());
-                    $this->success = "Equipo aceptado e inscrito en el torneo.";
-                    break;
-
-                case 'rechazar_solicitud_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->rechazarSolicitudTorneo($post['id_solicitud'], $this->auth->getUserId());
-                    $this->success = "Solicitud rechazada.";
-                    break;
-
-                case 'cancelar_solicitud_torneo':
-                    if (!$this->auth->isLoggedIn()) {
-                        throw new Exception("No autorizado");
-                    }
-                    $this->torneo->cancelarSolicitudTorneo($post['id_solicitud'], $post['id_equipo']);
-                    $this->success = "Solicitud cancelada.";
-                    break;
-                // ─────────────────────────────────────────────────────────────
-
                 case 'generar_ronda':
                     if (!$this->auth->isLoggedIn()) {
                         throw new Exception("No autorizado");
@@ -247,6 +208,67 @@ class ActionHandler {
                     $this->admin->eliminarCuenta($post['id_cuenta']);
                     $this->success = "Cuenta eliminada exitosamente";
                     break;
+                    
+                            case 'solicitar_torneo':
+            if (!$this->auth->isLoggedIn()) {
+                return ['error' => 'Debes iniciar sesión para solicitar inscripción.'];
+            }
+            try {
+                $id_equipo = !empty($_POST['id_equipo']) ? (int)$_POST['id_equipo'] : null;
+                $this->torneo->solicitarUnirse(
+                    (int)$_POST['id_torneo'],
+                    (int)$_SESSION['user_id'],
+                    $id_equipo,
+                    trim($_POST['mensaje'] ?? '')
+                );
+                return ['success' => 'Solicitud enviada correctamente. El organizador la revisará pronto.', 'redirect' => 'index.php'];
+            } catch (\Exception $e) {
+                return ['error' => $e->getMessage()];
+            }
+ 
+        case 'aceptar_solicitud_torneo':
+            if (!$this->auth->isLoggedIn()) {
+                return ['error' => 'Acceso no autorizado.'];
+            }
+            try {
+                $this->torneo->aceptarSolicitudTorneo(
+                    (int)$_POST['id_solicitud'],
+                    (int)$_SESSION['user_id'],
+                    $this->auth->isAdmin()
+                );
+                return ['success' => 'Solicitud aceptada. El equipo/jugador ha sido inscrito.', 'redirect' => 'index.php'];
+            } catch (\Exception $e) {
+                return ['error' => $e->getMessage()];
+            }
+ 
+        case 'rechazar_solicitud_torneo':
+            if (!$this->auth->isLoggedIn()) {
+                return ['error' => 'Acceso no autorizado.'];
+            }
+            try {
+                $this->torneo->rechazarSolicitudTorneo(
+                    (int)$_POST['id_solicitud'],
+                    (int)$_SESSION['user_id'],
+                    $this->auth->isAdmin()
+                );
+                return ['success' => 'Solicitud rechazada.', 'redirect' => 'index.php'];
+            } catch (\Exception $e) {
+                return ['error' => $e->getMessage()];
+            }
+ 
+        case 'cancelar_solicitud_torneo':
+            if (!$this->auth->isLoggedIn()) {
+                return ['error' => 'Acceso no autorizado.'];
+            }
+            try {
+                $this->torneo->cancelarSolicitudTorneo(
+                    (int)$_POST['id_solicitud'],
+                    (int)$_SESSION['user_id']
+                );
+                return ['success' => 'Solicitud cancelada.', 'redirect' => 'index.php'];
+            } catch (\Exception $e) {
+                return ['error' => $e->getMessage()];
+            }
                 
                 default:
                     throw new Exception("Acción no reconocida: " . $action);
@@ -271,6 +293,9 @@ class ActionHandler {
     
     private function registro($post) {
         $this->auth->registrarUsuario($post);
-        return ['redirect' => 'index.php'];
+        // Mostrar mensaje en lugar de redirigir — el usuario debe verificar su correo primero
+        $correo = htmlspecialchars($post['correo']);
+        $this->success = "¡Registro exitoso! Te enviamos un correo a <strong>{$correo}</strong> con un enlace de verificación. Revisa también tu carpeta de spam.";
+        return ['success' => $this->success];
     }
 }

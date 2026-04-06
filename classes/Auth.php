@@ -1,5 +1,6 @@
 <?php
 require_once 'Database.php';
+require_once __DIR__ . '/EmailService.php';
 
 class Auth {
     private $pdo;
@@ -14,6 +15,15 @@ class Auth {
         $cuenta = $stmt->fetch();
         
         if ($cuenta && password_verify($contrasena, $cuenta['contrasena'])) {
+
+            // Bloquear acceso si no ha verificado su correo
+            if (empty($cuenta['email_verificado']) || $cuenta['email_verificado'] == 0) {
+                throw new Exception(
+                    "Debes verificar tu correo electrónico antes de iniciar sesión. " .
+                    "Revisa tu bandeja de entrada y la carpeta de spam."
+                );
+            }
+
             $this->establecerSesion($cuenta);
             return true;
         }
@@ -41,32 +51,45 @@ class Auth {
     public function registrarUsuario($datos) {
         $this->pdo->beginTransaction();
         try {
-
+            // Verificar que no exista el usuario o correo
             $stmt = $this->pdo->prepare("SELECT id_cuenta FROM cuentas WHERE usuario = ? OR correo = ?");
             $stmt->execute([$datos['usuario'], $datos['correo']]);
             if ($stmt->fetch()) {
                 throw new Exception("El usuario o correo electrónico ya existen");
             }
+
+            // Generar token de verificación seguro (64 caracteres hex)
+            $token      = bin2hex(random_bytes(32));
+            $expiracion = date('Y-m-d H:i:s', strtotime('+24 hours'));
             
+            // Insertar cuenta con email_verificado = 0
             $hash = password_hash($datos['contrasena'], PASSWORD_DEFAULT);
-            $stmt = $this->pdo->prepare("INSERT INTO cuentas (usuario, contrasena, correo, id_rol) VALUES (?, ?, ?, 3)");
-            $stmt->execute([$datos['usuario'], $hash, $datos['correo']]);
+            $stmt = $this->pdo->prepare("
+                INSERT INTO cuentas 
+                    (usuario, contrasena, correo, id_rol, email_verificado, token_verificacion, token_expiracion) 
+                VALUES (?, ?, ?, 3, 0, ?, ?)
+            ");
+            $stmt->execute([$datos['usuario'], $hash, $datos['correo'], $token, $expiracion]);
             $id_cuenta = $this->pdo->lastInsertId();
             
-            $nombre = $datos['nombre'] ?? $datos['usuario'];
+            // Insertar jugador asociado
+            $nombre   = $datos['nombre']   ?? $datos['usuario'];
             $apellido = $datos['apellido'] ?? '';
-            $stmt = $this->pdo->prepare("INSERT INTO jugadores (nombre, apellido, rating, id_cuenta, activo) VALUES (?, ?, 1200, ?, 1)");
+            $stmt = $this->pdo->prepare("
+                INSERT INTO jugadores (nombre, apellido, rating, id_cuenta, activo) 
+                VALUES (?, ?, 1200, ?, 1)
+            ");
             $stmt->execute([$nombre, $apellido, $id_cuenta]);
-            $id_jugador = $this->pdo->lastInsertId();
             
             $this->pdo->commit();
-            
-            $_SESSION['user_id'] = $id_cuenta;
-            $_SESSION['username'] = $datos['usuario'];
-            $_SESSION['user_role'] = 3;
-            $_SESSION['jugador_id'] = $id_jugador;
-            
+
+            // Enviar correo de verificación DESPUÉS de guardar en BD
+            $emailService = new EmailService();
+            $emailService->enviarVerificacion($datos['correo'], $datos['usuario'], $token);
+
+            // NO iniciar sesión — el usuario debe verificar su correo primero
             return true;
+
         } catch (Exception $e) {
             $this->pdo->rollBack();
             throw $e;

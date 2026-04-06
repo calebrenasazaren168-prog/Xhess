@@ -273,30 +273,33 @@ class XhessSystem {
     public function contarSolicitudesPendientes($id_cuenta) {
         return $this->equipo->contarSolicitudesPendientesCapitan($id_cuenta);
     }
-
-    // ── SOLICITUDES DE TORNEO ─────────────────────────────────────────────────
-
-    public function getSolicitudesTorneoPendientes($id_torneo) {
-        return $this->torneo->obtenerSolicitudesPendientes($id_torneo);
+    
+        public function solicitarTorneo($id_torneo, $id_cuenta, $id_equipo, $mensaje = '') {
+        return $this->torneo->solicitarUnirse((int)$id_torneo, (int)$id_cuenta, $id_equipo ? (int)$id_equipo : null, $mensaje);
     }
-
-    public function getSolicitudesTorneoTodas($id_torneo) {
-        return $this->torneo->obtenerTodasSolicitudes($id_torneo);
+ 
+    public function aceptarSolicitudTorneo($id_solicitud) {
+        return $this->torneo->aceptarSolicitudTorneo((int)$id_solicitud, (int)$_SESSION['user_id'], $this->isAdmin());
     }
-
-    public function contarSolicitudesTorneoPendientes($id_cuenta) {
-        return $this->torneo->contarSolicitudesPendientesOrganizador($id_cuenta);
+ 
+    public function rechazarSolicitudTorneo($id_solicitud) {
+        return $this->torneo->rechazarSolicitudTorneo((int)$id_solicitud, (int)$_SESSION['user_id'], $this->isAdmin());
     }
-
-    public function getEstadoSolicitudTorneo($id_torneo, $id_equipo) {
-        return $this->torneo->obtenerEstadoSolicitud($id_torneo, $id_equipo);
+ 
+    public function cancelarSolicitudTorneo($id_solicitud) {
+        return $this->torneo->cancelarSolicitudTorneo((int)$id_solicitud, (int)$_SESSION['user_id']);
     }
-
-    public function getEquipoDelLider($id_cuenta) {
-        $pdo = Database::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM equipos WHERE id_creador = ? LIMIT 1");
-        $stmt->execute([$id_cuenta]);
-        return $stmt->fetch();
+ 
+    public function getSolicitudesTorneo($id_torneo) {
+        return $this->torneo->obtenerSolicitudesTorneo((int)$id_torneo);
+    }
+ 
+    public function getMisSolicitudesTorneos($id_cuenta) {
+        return $this->torneo->obtenerMisSolicitudesTorneos((int)$id_cuenta);
+    }
+ 
+    public function contarSolicitudesPendientesTorneos($id_cuenta) {
+        return $this->torneo->contarSolicitudesPendientesTorneos((int)$id_cuenta);
     }
 
 }

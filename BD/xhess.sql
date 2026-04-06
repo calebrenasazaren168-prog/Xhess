@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 05-03-2026 a las 05:10:44
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Servidor: sql210.infinityfree.com
+-- Tiempo de generación: 05-04-2026 a las 20:21:53
+-- Versión del servidor: 11.4.10-MariaDB
+-- Versión de PHP: 7.2.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `xhess`
+-- Base de datos: `if0_41208215_xhess`
 --
 
 -- --------------------------------------------------------
@@ -78,25 +79,18 @@ CREATE TABLE `cuentas` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `verified` tinyint(1) DEFAULT 0,
-  `verification_token` varchar(100) DEFAULT NULL
+  `verification_token` varchar(100) DEFAULT NULL,
+  `email_verificado` tinyint(1) NOT NULL DEFAULT 0,
+  `token_verificacion` varchar(64) DEFAULT NULL,
+  `token_expiracion` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `cuentas`
 --
 
-INSERT INTO `cuentas` (`id_cuenta`, `usuario`, `contrasena`, `id_rol`, `correo`, `activo`, `fecha_creacion`, `ultimo_login`, `avatar_url`, `created_at`, `updated_at`, `verified`, `verification_token`) VALUES
-(2, 'yakko', '$2y$10$AKubGymomBiAkCXVtawvh.mcXKsSxlTGFCBVZY/mnUCnKtmBv.oJu', 3, 'yakko@gmail.com', 1, '2025-11-26 04:46:52', NULL, NULL, '2025-11-26 04:46:52', NULL, 0, NULL),
-(3, 'wakko', '$2y$10$Nypj.hPc1g2ERZqC3tnwouOmaNslPKguq8uCw3dCCihvnWMfR/EFe', 3, 'wakko@gmail.com', 1, '2025-11-26 04:56:00', NULL, NULL, '2025-11-26 04:56:00', '2025-11-26 04:56:32', 0, NULL),
-(4, 'dot', '$2y$10$A9A9mj6hQUAeRcksR/I9MOOCCBkx9Wuiy2udEYI6q./JI425hUafa', 3, 'dot@gmail.com', 1, '2025-11-26 04:57:42', NULL, NULL, '2025-11-26 04:57:42', NULL, 0, NULL),
-(5, 'uniqua', '$2y$10$51LAFl8Xa0CBht1Ps1ukDeDA4vWsCCnpCaoT8w2zRWF3s0ZndP7um', 3, 'uniqua@gmail.com', 1, '2025-11-26 05:02:45', NULL, NULL, '2025-11-26 05:02:45', NULL, 0, NULL),
-(6, 'tyron', '$2y$10$Jx/1swVyUOhRobUOcY9b0eL1g5BqX37ArGFo6XAOfp5KF4PozIUlO', 3, 'tyron@gmail.com', 1, '2025-11-26 05:05:00', NULL, NULL, '2025-11-26 05:05:00', NULL, 0, NULL),
-(7, 'pablo', '$2y$10$kLeccG76mYFYVnB.sXbffOzJ7V8FCLB/7vpTq7i.Jy9NxqCX8cPrK', 3, 'pablo@gmail.com', 1, '2025-11-26 05:06:07', NULL, NULL, '2025-11-26 05:06:07', NULL, 0, NULL),
-(8, 'bugs', '$2y$10$dMF1CF8AW0eeiunceRqyOOoLMu4Tcp.CG19bQImx.1aUb.6mBdprS', 3, 'bugs@gmail.com', 1, '2025-11-26 05:07:30', NULL, NULL, '2025-11-26 05:07:30', NULL, 0, NULL),
-(9, 'porky', '$2y$10$wmFMsvkWiObQcUgXPFlpduTz888dRg0q2aiWuOE2oDFNk79CSNj3G', 3, 'porky@gmail.com', 1, '2025-11-26 05:09:09', NULL, NULL, '2025-11-26 05:09:09', NULL, 0, NULL),
-(10, 'daffy', '$2y$10$9CPgPmXibfOB56.xHqJXDu1JxwzVgBjVoQ5CWahiDYQinIrD2PsBO', 3, 'daffy@gmail.com', 1, '2025-11-26 23:03:20', NULL, NULL, '2025-11-26 23:03:20', NULL, 0, NULL),
-(11, '4x3l_MT', '$2y$10$y6x504rEvkNqam78.F/uLualva1sHXyNQzXHgAQJ9H/MS/JoPzQsi', 3, 'axelalcala45@gmail.com', 1, '2026-01-22 19:24:05', NULL, NULL, '2026-01-22 19:24:05', NULL, 0, NULL),
-(12, 'caleb', '$2y$10$cWHw7qcO9HB7XHqir60Le.fXYnPwquWUwLyHAJLOhzUNyMDYTeOTO', 3, 'calebejemplo@gmail.com', 1, '2026-03-04 21:53:47', NULL, NULL, '2026-03-04 21:53:47', NULL, 0, NULL);
+INSERT INTO `cuentas` (`id_cuenta`, `usuario`, `contrasena`, `id_rol`, `correo`, `activo`, `fecha_creacion`, `ultimo_login`, `avatar_url`, `created_at`, `updated_at`, `verified`, `verification_token`, `email_verificado`, `token_verificacion`, `token_expiracion`) VALUES
+(36, '4x3l_MT', '$2y$10$.kBsAsbrZlbnTMsXxoP74ucdtVbXjnFNPigIn5moeyR4JI3vBX586', 3, 'axelalcala45@gmail.com', 1, '2026-03-31 17:41:46', NULL, NULL, '2026-03-31 17:41:46', '2026-03-31 17:42:00', 0, NULL, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -119,9 +113,18 @@ CREATE TABLE `emparejamientos` (
 --
 
 INSERT INTO `emparejamientos` (`id_emparejamiento`, `id_ronda`, `equipo_blancas`, `equipo_negras`, `es_bye`, `created_at`, `updated_at`) VALUES
-(1, 1, 5, 4, 0, '2026-01-22 19:24:47', NULL),
-(2, 2, 3, 5, 0, '2026-01-22 19:25:18', NULL),
-(3, 3, 4, 3, 0, '2026-01-22 19:25:49', NULL);
+(4, 4, NULL, NULL, 0, '2026-03-12 11:22:52', NULL),
+(5, 4, NULL, NULL, 0, '2026-03-12 11:22:52', NULL),
+(6, 5, NULL, NULL, 0, '2026-03-12 11:26:35', NULL),
+(7, 5, NULL, NULL, 0, '2026-03-12 11:26:35', NULL),
+(8, 6, NULL, NULL, 0, '2026-03-12 11:28:35', NULL),
+(9, 6, NULL, NULL, 0, '2026-03-12 11:28:35', NULL),
+(10, 7, NULL, NULL, 0, '2026-03-12 11:39:35', NULL),
+(11, 7, NULL, NULL, 0, '2026-03-12 11:39:35', NULL),
+(12, 8, NULL, NULL, 0, '2026-03-12 12:28:58', NULL),
+(13, 8, NULL, NULL, 0, '2026-03-12 12:28:58', NULL),
+(14, 9, NULL, NULL, 0, '2026-03-12 12:31:00', NULL),
+(15, 9, NULL, NULL, 0, '2026-03-12 12:31:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -146,10 +149,7 @@ CREATE TABLE `equipos` (
 --
 
 INSERT INTO `equipos` (`id_equipo`, `nombre`, `id_club`, `id_coach`, `id_creador`, `avatar_url`, `created_at`, `updated_at`, `es_capitan`) VALUES
-(3, 'Animaniacos', 1, 2, 2, NULL, '2025-11-26 04:54:55', '2025-11-26 21:34:48', 1),
-(4, 'Backyardigans', 1, 5, 5, NULL, '2025-11-26 05:03:27', '2025-11-26 21:34:48', 1),
-(5, 'Los Looney Tunes', 1, 9, 9, NULL, '2025-11-26 05:10:18', '2025-11-26 21:34:48', 1),
-(7, 'prueba', 1, 11, 11, NULL, '2026-03-04 21:52:59', NULL, 0);
+(14, 'prueba', 1, 36, 36, NULL, '2026-04-05 16:49:08', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -214,18 +214,30 @@ CREATE TABLE `jugadores` (
 --
 
 INSERT INTO `jugadores` (`id_jugador`, `nombre`, `apellido`, `rating`, `id_equipo`, `id_cuenta`, `fecha_nacimiento`, `sexo`, `avatar_url`, `activo`, `created_at`, `updated_at`) VALUES
-(1, 'caleb', 'arenas', 1200, NULL, 1, NULL, NULL, NULL, 1, '2025-11-26 04:41:59', NULL),
-(2, 'yakko', 'animaniac', 1169, 3, 2, NULL, NULL, NULL, 1, '2025-11-26 04:46:52', '2026-01-22 19:45:42'),
-(3, 'wakko', 'animaniac', 1169, 3, 3, NULL, NULL, NULL, 1, '2025-11-26 04:56:00', '2026-01-22 19:45:42'),
-(4, 'dot', 'animaniac', 1169, 3, 4, NULL, NULL, NULL, 1, '2025-11-26 04:57:42', '2026-01-22 19:45:42'),
-(5, 'uniqua', 'butterfly', 1232, 4, 5, NULL, NULL, NULL, 1, '2025-11-26 05:02:45', '2026-01-22 19:45:42'),
-(6, 'Tyron', 'moose', 1232, 4, 6, NULL, NULL, NULL, 1, '2025-11-26 05:05:00', '2026-01-22 19:45:42'),
-(7, 'pablo', 'alfonso', 1232, 4, 7, NULL, NULL, NULL, 1, '2025-11-26 05:06:07', '2026-01-22 19:45:42'),
-(8, 'Bugs', 'Bunny', 1199, 5, 8, NULL, NULL, NULL, 1, '2025-11-26 05:07:30', '2026-01-22 19:25:26'),
-(9, 'porky', 'pig', 1199, 5, 9, NULL, NULL, NULL, 1, '2025-11-26 05:09:09', '2026-01-22 19:25:26'),
-(10, 'Daffy', 'duck', 1199, 5, 10, NULL, NULL, NULL, 1, '2025-11-26 23:03:20', '2026-01-22 19:25:26'),
-(11, 'Axel', 'Alcala', 1200, 7, 11, NULL, NULL, NULL, 1, '2026-01-22 19:24:05', '2026-03-04 21:52:59'),
-(12, 'Caleb', 'Arenas', 1200, 7, 12, NULL, NULL, NULL, 1, '2026-03-04 21:53:47', '2026-03-04 21:57:41');
+(14, 'Axel', 'Alcala', 1200, NULL, 14, NULL, NULL, NULL, 1, '2026-03-12 07:50:19', NULL),
+(15, 'Pablo', 'backyardigan', 1213, NULL, 15, NULL, NULL, NULL, 1, '2026-03-12 08:54:07', '2026-03-12 12:31:38'),
+(16, 'tiron', 'backyardigan', 1169, NULL, 16, NULL, NULL, NULL, 1, '2026-03-12 08:58:09', '2026-03-12 12:31:38'),
+(17, 'yuniqua', 'backyardigan', 1183, NULL, 17, NULL, NULL, NULL, 1, '2026-03-12 08:59:29', '2026-03-12 12:30:11'),
+(18, 'bugsbunny', 'looneyToon', 1289, NULL, 18, NULL, NULL, NULL, 1, '2026-03-12 09:03:01', '2026-03-12 12:31:38'),
+(19, 'Porky', 'toon', 1268, NULL, 19, NULL, NULL, NULL, 1, '2026-03-12 09:05:45', '2026-03-12 12:31:38'),
+(20, 'Lucas', 'Pato', 1200, NULL, 20, NULL, NULL, NULL, 1, '2026-03-12 09:08:53', NULL),
+(21, 'Batman', 'Wayne', 1191, NULL, 21, NULL, NULL, NULL, 1, '2026-03-12 09:09:51', '2026-03-12 12:31:38'),
+(22, 'DareDevil', 'murdok', 1161, NULL, 22, NULL, NULL, NULL, 1, '2026-03-12 09:11:36', '2026-03-12 12:31:38'),
+(23, 'Moon', 'knight', 1172, NULL, 23, NULL, NULL, NULL, 1, '2026-03-12 09:12:40', '2026-03-12 12:30:11'),
+(24, 'skipper', 'pinguino', 1159, NULL, 24, NULL, NULL, NULL, 1, '2026-03-12 09:16:55', '2026-03-12 12:31:38'),
+(25, 'Cabo', 'pingui', 1200, NULL, 25, NULL, NULL, NULL, 1, '2026-03-12 10:18:03', '2026-03-12 11:19:57'),
+(26, 'kobalsky', 'pingui', 1217, NULL, 26, NULL, NULL, NULL, 1, '2026-03-12 10:18:55', '2026-03-12 12:31:38'),
+(27, 'Rico', 'pingui', 1127, NULL, 27, NULL, NULL, NULL, 1, '2026-03-12 10:19:33', '2026-03-12 12:31:38'),
+(28, 'santiago', 'nuñez', 1200, NULL, 28, NULL, NULL, NULL, 1, '2026-03-12 10:22:15', NULL),
+(29, 'Lucas', 'Pato', 1251, NULL, 29, NULL, NULL, NULL, 1, '2026-03-12 11:17:28', '2026-03-12 12:31:38'),
+(30, 'Juan', 'Perez', 1200, NULL, 30, NULL, NULL, NULL, 1, '2026-03-12 12:25:17', NULL),
+(31, 'Axel', 'Alcala', 1200, NULL, 31, NULL, NULL, NULL, 1, '2026-03-31 16:49:39', NULL),
+(32, 'Axel', 'Alcala', 1200, NULL, 32, NULL, NULL, NULL, 1, '2026-03-31 16:53:15', NULL),
+(33, 'Axel', 'Alcala', 1200, NULL, 33, NULL, NULL, NULL, 1, '2026-03-31 17:29:58', NULL),
+(34, 'Axel', 'Alcala', 1200, NULL, 34, NULL, NULL, NULL, 1, '2026-03-31 17:33:06', NULL),
+(35, 'atsel', 'rodriguez', 1200, NULL, 35, NULL, NULL, NULL, 1, '2026-03-31 17:34:55', NULL),
+(36, 'Axel', 'Alcala', 1200, 14, 36, NULL, NULL, NULL, 1, '2026-03-31 17:41:46', '2026-04-05 16:49:08'),
+(37, 'prueba', 'solicitud', 1200, NULL, 37, NULL, NULL, NULL, 1, '2026-04-05 17:18:13', '2026-04-05 17:19:03');
 
 -- --------------------------------------------------------
 
@@ -252,15 +264,51 @@ CREATE TABLE `partidas` (
 --
 
 INSERT INTO `partidas` (`id_partida`, `id_emparejamiento`, `tablero`, `id_jugador_blancas`, `id_jugador_negras`, `fecha_partida`, `resultado`, `comentarios`, `pgn`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 8, 5, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
-(2, 1, 2, 9, 6, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
-(3, 1, 3, 10, 7, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
-(4, 2, 1, 2, 8, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
-(5, 2, 2, 3, 9, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
-(6, 2, 3, 4, 10, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
-(7, 3, 1, 5, 2, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:52'),
-(8, 3, 2, 6, 3, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:53'),
-(9, 3, 3, 7, 4, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:53');
+(1, NULL, 1, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
+(2, NULL, 2, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
+(3, NULL, 3, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:24:47', '2026-01-22 19:24:55'),
+(4, NULL, 1, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
+(5, NULL, 2, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
+(6, NULL, 3, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:18', '2026-01-22 19:25:26'),
+(7, NULL, 1, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:52'),
+(8, NULL, 2, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:53'),
+(9, NULL, 3, NULL, NULL, NULL, '1-0', NULL, NULL, '2026-01-22 19:25:49', '2026-01-22 19:26:53'),
+(10, 4, 1, 24, 15, NULL, '1/2', NULL, NULL, '2026-03-12 11:22:52', '2026-03-12 11:25:41'),
+(11, 4, 2, 26, 16, NULL, '1-0', NULL, NULL, '2026-03-12 11:22:52', '2026-03-12 11:25:41'),
+(12, 4, 3, 27, 17, NULL, '0-1', NULL, NULL, '2026-03-12 11:22:52', '2026-03-12 11:25:41'),
+(13, 5, 1, 21, 18, NULL, '0-1', NULL, NULL, '2026-03-12 11:22:52', '2026-03-12 11:25:41'),
+(14, 5, 2, 22, 19, NULL, '0-1', NULL, NULL, '2026-03-12 11:22:52', '2026-03-12 11:25:41'),
+(15, 5, 3, 23, 29, NULL, '0-1', NULL, NULL, '2026-03-12 11:22:52', '2026-03-12 11:25:41'),
+(16, 6, 1, 17, 21, NULL, '1-0', NULL, NULL, '2026-03-12 11:26:35', '2026-03-12 11:27:24'),
+(17, 6, 2, 15, 22, NULL, '1/2', NULL, NULL, '2026-03-12 11:26:35', '2026-03-12 11:27:24'),
+(18, 6, 3, 16, 23, NULL, '1/2', NULL, NULL, '2026-03-12 11:26:35', '2026-03-12 11:27:24'),
+(19, 7, 1, 26, 18, NULL, '0-1', NULL, NULL, '2026-03-12 11:26:35', '2026-03-12 11:27:24'),
+(20, 7, 2, 24, 19, NULL, '0-1', NULL, NULL, '2026-03-12 11:26:35', '2026-03-12 11:27:24'),
+(21, 7, 3, 27, 29, NULL, '0-1', NULL, NULL, '2026-03-12 11:26:35', '2026-03-12 11:27:24'),
+(22, 8, 1, 18, 17, NULL, '1-0', NULL, NULL, '2026-03-12 11:28:35', '2026-03-12 11:29:20'),
+(23, 8, 2, 19, 15, NULL, '1-0', NULL, NULL, '2026-03-12 11:28:35', '2026-03-12 11:29:20'),
+(24, 8, 3, 29, 16, NULL, '1-0', NULL, NULL, '2026-03-12 11:28:35', '2026-03-12 11:29:20'),
+(25, 9, 1, 26, 22, NULL, '1/2', NULL, NULL, '2026-03-12 11:28:35', '2026-03-12 11:29:20'),
+(26, 9, 2, 24, 23, NULL, '0-1', NULL, NULL, '2026-03-12 11:28:35', '2026-03-12 11:29:20'),
+(27, 9, 3, 27, 21, NULL, '1/2', NULL, NULL, '2026-03-12 11:28:35', '2026-03-12 11:29:20'),
+(28, 10, 1, 26, 17, NULL, '1-0', NULL, NULL, '2026-03-12 11:39:35', '2026-03-12 11:41:00'),
+(29, 10, 2, 24, 15, NULL, '1/2', NULL, NULL, '2026-03-12 11:39:35', '2026-03-12 11:41:00'),
+(30, 10, 3, 27, 16, NULL, '0-1', NULL, NULL, '2026-03-12 11:39:35', '2026-03-12 11:41:00'),
+(31, 11, 1, 23, 18, NULL, '0-1', NULL, NULL, '2026-03-12 11:39:35', '2026-03-12 11:41:00'),
+(32, 11, 2, 22, 19, NULL, '1/2', NULL, NULL, '2026-03-12 11:39:35', '2026-03-12 11:41:00'),
+(33, 11, 3, 21, 29, NULL, '1-0', NULL, NULL, '2026-03-12 11:39:35', '2026-03-12 11:41:00'),
+(34, 12, 1, 26, 17, NULL, '1-0', NULL, NULL, '2026-03-12 12:28:58', '2026-03-12 12:30:11'),
+(35, 12, 2, 24, 16, NULL, '1/2', NULL, NULL, '2026-03-12 12:28:58', '2026-03-12 12:30:11'),
+(36, 12, 3, 27, 15, NULL, '0-1', NULL, NULL, '2026-03-12 12:28:58', '2026-03-12 12:30:11'),
+(37, 13, 1, 22, 18, NULL, '0-1', NULL, NULL, '2026-03-12 12:28:58', '2026-03-12 12:30:11'),
+(38, 13, 2, 21, 19, NULL, '0-1', NULL, NULL, '2026-03-12 12:28:58', '2026-03-12 12:30:11'),
+(39, 13, 3, 23, 29, NULL, '0-1', NULL, NULL, '2026-03-12 12:28:58', '2026-03-12 12:30:11'),
+(40, 14, 1, 15, 22, NULL, '1-0', NULL, NULL, '2026-03-12 12:31:00', '2026-03-12 12:31:38'),
+(41, 14, 2, 16, 21, NULL, '0-1', NULL, NULL, '2026-03-12 12:31:00', '2026-03-12 12:31:38'),
+(42, 14, 3, 17, 23, NULL, '*', NULL, NULL, '2026-03-12 12:31:00', NULL),
+(43, 15, 1, 26, 18, NULL, '0-1', NULL, NULL, '2026-03-12 12:31:00', '2026-03-12 12:31:38'),
+(44, 15, 2, 24, 19, NULL, '0-1', NULL, NULL, '2026-03-12 12:31:00', '2026-03-12 12:31:38'),
+(45, 15, 3, 27, 29, NULL, '0-1', NULL, NULL, '2026-03-12 12:31:00', '2026-03-12 12:31:38');
 
 -- --------------------------------------------------------
 
@@ -321,9 +369,12 @@ CREATE TABLE `rondas` (
 --
 
 INSERT INTO `rondas` (`id_ronda`, `id_torneo`, `numero_ronda`, `fecha_ronda`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2026-01-23', '2026-01-22 19:24:47', NULL),
-(2, 1, 2, '2026-01-24', '2026-01-22 19:25:18', NULL),
-(3, 1, 3, '2026-01-25', '2026-01-22 19:25:49', NULL);
+(4, 4, 1, '2026-03-12', '2026-03-12 11:22:52', NULL),
+(5, 4, 2, '2026-03-12', '2026-03-12 11:26:35', NULL),
+(6, 4, 3, '2026-03-13', '2026-03-12 11:28:35', NULL),
+(7, 5, 1, '2026-03-12', '2026-03-12 11:39:35', NULL),
+(8, 6, 1, '2026-03-12', '2026-03-12 12:28:58', NULL),
+(9, 6, 2, '2026-03-12', '2026-03-12 12:31:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -341,12 +392,22 @@ CREATE TABLE `solicitudes_equipo` (
   `fecha_respuesta` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `solicitudes_equipo`
+-- Estructura de tabla para la tabla `solicitudes_torneo`
 --
 
-INSERT INTO `solicitudes_equipo` (`id_solicitud`, `id_jugador`, `id_equipo`, `estado`, `mensaje`, `fecha_solicitud`, `fecha_respuesta`) VALUES
-(1, 12, 7, 'aceptada', 'aceptenme prros', '2026-03-04 21:54:15', '2026-03-04 21:57:41');
+CREATE TABLE `solicitudes_torneo` (
+  `id_solicitud` int(11) NOT NULL,
+  `id_torneo` int(11) NOT NULL,
+  `id_equipo` int(11) NOT NULL,
+  `id_cuenta` int(11) NOT NULL,
+  `estado` enum('pendiente','aceptada','rechazada') DEFAULT 'pendiente',
+  `mensaje` varchar(255) DEFAULT NULL,
+  `fecha_solicitud` datetime DEFAULT current_timestamp(),
+  `fecha_respuesta` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -380,7 +441,10 @@ CREATE TABLE `torneos` (
 --
 
 INSERT INTO `torneos` (`id_torneo`, `nombre`, `descripcion`, `tipo`, `sistema`, `condicion`, `nro_tableros`, `fecha_inicio`, `fecha_fin`, `ubicacion`, `ciudad`, `provincia`, `pais`, `id_cuenta`, `ritmo_tiempo`, `id_club`, `created_at`, `updated_at`) VALUES
-(1, 'prueba', '', 'equipos', 'round_robin_ponderado', 'finalizado', 4, '2026-01-23', '2026-01-26', 'Biblioteca', NULL, NULL, 'México', 11, '60+30', 1, '2026-01-22 19:24:25', '2026-03-04 21:52:02');
+(4, 'expo', '', 'equipos', 'round_robin_ponderado', 'finalizado', 4, '2026-03-12', '2026-03-13', 'Cbtis 168 Biblioteca', NULL, NULL, 'México', NULL, '60+30', 1, '2026-03-12 11:21:22', '2026-03-16 09:46:55'),
+(5, 'prueba', '', 'equipos', 'round_robin_ponderado', 'finalizado', 4, '2026-03-12', '2026-03-12', 'Cbtis 168 Biblioteca', NULL, NULL, 'México', NULL, '60+30', 1, '2026-03-12 11:39:00', '2026-03-12 22:53:29'),
+(6, 'expo2', '', 'equipos', 'round_robin_ponderado', 'finalizado', 4, '2026-03-12', '2026-03-13', 'Cbtis 168 Biblioteca', NULL, NULL, 'México', NULL, '60+30', 1, '2026-03-12 12:27:43', '2026-03-16 09:46:55'),
+(7, 'pruebasolicitud', '', 'equipos', 'round_robin_ponderado', 'en_progreso', 4, '2026-04-05', '2026-04-07', 'biblioteca', NULL, NULL, 'México', 36, '60+30', 1, '2026-04-05 17:15:20', '2026-04-05 17:15:20');
 
 -- --------------------------------------------------------
 
@@ -394,15 +458,6 @@ CREATE TABLE `torneo_equipos` (
   `nro_jugadores_equipo` int(11) DEFAULT 4,
   `retirado` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `torneo_equipos`
---
-
-INSERT INTO `torneo_equipos` (`id_torneo`, `id_equipo`, `nro_jugadores_equipo`, `retirado`) VALUES
-(1, 3, 4, 0),
-(1, 4, 4, 0),
-(1, 5, 4, 0);
 
 --
 -- Índices para tablas volcadas
@@ -517,6 +572,16 @@ ALTER TABLE `solicitudes_equipo`
   ADD KEY `idx_sol_jugador` (`id_jugador`);
 
 --
+-- Indices de la tabla `solicitudes_torneo`
+--
+ALTER TABLE `solicitudes_torneo`
+  ADD PRIMARY KEY (`id_solicitud`),
+  ADD UNIQUE KEY `uk_solicitud_torneo_equipo` (`id_torneo`,`id_equipo`,`estado`),
+  ADD KEY `idx_st_torneo` (`id_torneo`),
+  ADD KEY `idx_st_equipo` (`id_equipo`),
+  ADD KEY `idx_st_cuenta` (`id_cuenta`);
+
+--
 -- Indices de la tabla `torneos`
 --
 ALTER TABLE `torneos`
@@ -553,19 +618,19 @@ ALTER TABLE `clubes`
 -- AUTO_INCREMENT de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
-  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `emparejamientos`
 --
 ALTER TABLE `emparejamientos`
-  MODIFY `id_emparejamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_emparejamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
 --
 ALTER TABLE `equipos`
-  MODIFY `id_equipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_equipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `estadisticas_equipo`
@@ -583,13 +648,13 @@ ALTER TABLE `estadisticas_jugador`
 -- AUTO_INCREMENT de la tabla `jugadores`
 --
 ALTER TABLE `jugadores`
-  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `partidas`
 --
 ALTER TABLE `partidas`
-  MODIFY `id_partida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_partida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `puntuaciones_jugador_ronda`
@@ -607,19 +672,25 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `rondas`
 --
 ALTER TABLE `rondas`
-  MODIFY `id_ronda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_ronda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes_equipo`
 --
 ALTER TABLE `solicitudes_equipo`
+  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `solicitudes_torneo`
+--
+ALTER TABLE `solicitudes_torneo`
   MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `torneos`
 --
 ALTER TABLE `torneos`
-  MODIFY `id_torneo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_torneo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
@@ -701,6 +772,14 @@ ALTER TABLE `rondas`
 ALTER TABLE `solicitudes_equipo`
   ADD CONSTRAINT `fk_sol_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_sol_jugador` FOREIGN KEY (`id_jugador`) REFERENCES `jugadores` (`id_jugador`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `solicitudes_torneo`
+--
+ALTER TABLE `solicitudes_torneo`
+  ADD CONSTRAINT `fk_st_cuenta` FOREIGN KEY (`id_cuenta`) REFERENCES `cuentas` (`id_cuenta`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_st_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_st_torneo` FOREIGN KEY (`id_torneo`) REFERENCES `torneos` (`id_torneo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `torneos`

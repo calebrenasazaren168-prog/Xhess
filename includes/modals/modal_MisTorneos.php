@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <?php 
+                <?php
                 $misTorneos = $sistema->getMisTorneos($_SESSION['user_id']);
                 if (empty($misTorneos)): ?>
                     <div class="col-12 text-center py-5">
@@ -18,8 +18,13 @@
                     <?php include 'includes/modals/torneos/selector_torneo.php'; ?>
 
                     <!-- Contenedor de Torneos -->
-                    <?php foreach ($misTorneos as $index => $torneo): ?>
-                        <div id="torneo-detalle-<?= $torneo['id_torneo'] ?>" class="torneo-detalle" style="display: <?= $index === 0 ? 'block' : 'none' ?>;">
+                    <?php foreach ($misTorneos as $index => $torneo):
+                        // Contar solicitudes pendientes de este torneo
+                        $sols_pendientes_torneo = $sistema->getSolicitudesTorneo($torneo['id_torneo']);
+                        $nro_pendientes_torneo  = count(array_filter($sols_pendientes_torneo, fn($s) => $s['estado'] === 'pendiente'));
+                    ?>
+                        <div id="torneo-detalle-<?= $torneo['id_torneo'] ?>" class="torneo-detalle"
+                             style="display: <?= $index === 0 ? 'block' : 'none' ?>;">
                             <div class="card">
                                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                     <div>
@@ -33,140 +38,61 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-bs-toggle="tab" href="#equipos-<?= $torneo['id_torneo'] ?>">Equipos</a>
+                                            <a class="nav-link active" data-bs-toggle="tab"
+                                               href="#equipos-<?= $torneo['id_torneo'] ?>">Equipos</a>
                                         </li>
                                         <li class="nav-item">
-                                            <?php $solPendCount = count($sistema->getSolicitudesTorneoPendientes($torneo['id_torneo'])); ?>
-                                            <a class="nav-link position-relative" data-bs-toggle="tab" href="#solicitudes-torneo-<?= $torneo['id_torneo'] ?>">
-                                                Solicitudes
-                                                <?php if ($solPendCount > 0): ?>
-                                                    <span class="badge bg-danger ms-1"><?= $solPendCount ?></span>
+                                            <a class="nav-link" data-bs-toggle="tab"
+                                               href="#clasificacion-<?= $torneo['id_torneo'] ?>">Clasificación</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab"
+                                               href="#rondas-<?= $torneo['id_torneo'] ?>">Rondas</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab"
+                                               href="#emparejamientos-<?= $torneo['id_torneo'] ?>">Emparejamientos</a>
+                                        </li>
+                                        <!-- ── NUEVA PESTAÑA SOLICITUDES ── -->
+                                        <li class="nav-item">
+                                            <a class="nav-link position-relative" data-bs-toggle="tab"
+                                               href="#solicitudes-<?= $torneo['id_torneo'] ?>">
+                                                <i class="fas fa-envelope me-1"></i>Solicitudes
+                                                <?php if ($nro_pendientes_torneo > 0): ?>
+                                                    <span class="position-absolute top-0 start-100 translate-middle
+                                                                  badge rounded-pill bg-danger"
+                                                          style="font-size:.6rem">
+                                                        <?= $nro_pendientes_torneo ?>
+                                                    </span>
                                                 <?php endif; ?>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#clasificacion-<?= $torneo['id_torneo'] ?>">Clasificación</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#rondas-<?= $torneo['id_torneo'] ?>">Rondas</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#emparejamientos-<?= $torneo['id_torneo'] ?>">Emparejamientos</a>
-                                        </li>
                                     </ul>
-                                    
+
                                     <div class="tab-content mt-3">
-                                        <!-- Tab de Equipos -->
+                                        <!-- Tab Equipos -->
                                         <div class="tab-pane fade show active" id="equipos-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_equipos.php'; ?>
                                         </div>
 
-                                        <!-- Tab de Solicitudes de Torneo -->
-                                        <div class="tab-pane fade" id="solicitudes-torneo-<?= $torneo['id_torneo'] ?>">
-                                            <?php
-                                            $solPend = $sistema->getSolicitudesTorneoPendientes($torneo['id_torneo']);
-                                            $solTodas = $sistema->getSolicitudesTorneoTodas($torneo['id_torneo']);
-                                            $solHist = array_filter($solTodas, fn($s) => $s['estado'] !== 'pendiente');
-                                            ?>
-                                            <h6><i class="fas fa-envelope-open-text me-1"></i>Solicitudes de Equipos</h6>
-                                            <p class="text-muted">
-                                                <small>Rango de jugadores del torneo: 
-                                                    <strong><?= $torneo['min_jugadores'] ?? '?' ?></strong> — 
-                                                    <strong><?= $torneo['max_jugadores'] ?? '?' ?></strong>
-                                                </small>
-                                            </p>
-
-                                            <?php if (empty($solPend)): ?>
-                                                <p class="text-muted"><i class="fas fa-inbox me-1"></i>No hay solicitudes pendientes.</p>
-                                            <?php else: ?>
-                                                <div class="table-responsive mb-3">
-                                                    <table class="table table-sm table-bordered align-middle">
-                                                        <thead class="table-warning">
-                                                            <tr>
-                                                                <th>Equipo</th><th>Club</th><th>Jugadores</th>
-                                                                <th>Líder</th><th>Mensaje</th><th>Acción</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <?php foreach ($solPend as $sol): ?>
-                                                                <tr>
-                                                                    <td><strong><?= htmlspecialchars($sol['equipo_nombre']) ?></strong></td>
-                                                                    <td><?= htmlspecialchars($sol['club_nombre']) ?></td>
-                                                                    <td><span class="badge bg-info"><?= $sol['num_jugadores'] ?></span></td>
-                                                                    <td><?= htmlspecialchars($sol['lider_usuario']) ?></td>
-                                                                    <td><small class="text-muted"><?= htmlspecialchars($sol['mensaje'] ?: '—') ?></small></td>
-                                                                    <td>
-                                                                        <?php if ($torneo['condicion'] !== 'finalizado'): ?>
-                                                                        <form method="post" class="d-inline">
-                                                                            <input type="hidden" name="action" value="aceptar_solicitud_torneo">
-                                                                            <input type="hidden" name="id_solicitud" value="<?= $sol['id_solicitud'] ?>">
-                                                                            <button type="button" class="btn btn-xs btn-success"
-                                                                                    onclick="confirmarAccion('¿Aceptar al equipo <?= htmlspecialchars($sol['equipo_nombre']) ?>?', this.closest(\'form\'))">
-                                                                                <i class="fas fa-check"></i>
-                                                                            </button>
-                                                                        </form>
-                                                                        <form method="post" class="d-inline ms-1">
-                                                                            <input type="hidden" name="action" value="rechazar_solicitud_torneo">
-                                                                            <input type="hidden" name="id_solicitud" value="<?= $sol['id_solicitud'] ?>">
-                                                                            <button type="button" class="btn btn-xs btn-danger"
-                                                                                    onclick="confirmarAccion('¿Rechazar solicitud de <?= htmlspecialchars($sol['equipo_nombre']) ?>?', this.closest(\'form\'))">
-                                                                                <i class="fas fa-times"></i>
-                                                                            </button>
-                                                                        </form>
-                                                                        <?php else: ?>
-                                                                            <span class="text-muted">—</span>
-                                                                        <?php endif; ?>
-                                                                    </td>
-                                                                </tr>
-                                                            <?php endforeach; ?>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            <?php endif; ?>
-
-                                            <?php if (!empty($solHist)): ?>
-                                                <details>
-                                                    <summary class="text-muted" style="cursor:pointer;">
-                                                        <i class="fas fa-history me-1"></i>Historial (<?= count($solHist) ?>)
-                                                    </summary>
-                                                    <div class="table-responsive mt-2">
-                                                        <table class="table table-sm table-bordered align-middle">
-                                                            <thead class="table-light">
-                                                                <tr><th>Equipo</th><th>Jugadores</th><th>Estado</th><th>Respuesta</th></tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php foreach ($solHist as $h): ?>
-                                                                    <tr>
-                                                                        <td><?= htmlspecialchars($h['equipo_nombre']) ?></td>
-                                                                        <td><?= $h['num_jugadores'] ?></td>
-                                                                        <td>
-                                                                            <span class="badge bg-<?= $h['estado'] === 'aceptada' ? 'success' : 'danger' ?>">
-                                                                                <?= ucfirst($h['estado']) ?>
-                                                                            </span>
-                                                                        </td>
-                                                                        <td><small><?= $h['fecha_respuesta'] ? date('d/m/Y', strtotime($h['fecha_respuesta'])) : '—' ?></small></td>
-                                                                    </tr>
-                                                                <?php endforeach; ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </details>
-                                            <?php endif; ?>
-                                        </div>
-                                        
-                                        <!-- Tab de Clasificación -->
+                                        <!-- Tab Clasificación -->
                                         <div class="tab-pane fade" id="clasificacion-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_clasificacion.php'; ?>
                                         </div>
-                                        
-                                        <!-- Tab de Rondas -->
+
+                                        <!-- Tab Rondas -->
                                         <div class="tab-pane fade" id="rondas-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_rondas.php'; ?>
                                         </div>
-                                        
-                                        <!-- Tab de Emparejamientos -->
+
+                                        <!-- Tab Emparejamientos -->
                                         <div class="tab-pane fade" id="emparejamientos-<?= $torneo['id_torneo'] ?>">
                                             <?php include 'includes/modals/torneos/tab_emparejamientos.php'; ?>
+                                        </div>
+
+                                        <!-- ── Tab Solicitudes ── -->
+                                        <div class="tab-pane fade" id="solicitudes-<?= $torneo['id_torneo'] ?>">
+                                            <?php include 'includes/modals/torneos/tab_solicitudes_torneo.php'; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -183,17 +109,15 @@
 function seleccionarTorneo(select) {
     const torneos = document.querySelectorAll('.torneo-detalle');
     torneos.forEach(t => t.style.display = 'none');
-    
+
     const selectedId = select.value;
     if (selectedId) {
         const selectedDiv = document.getElementById(selectedId);
-        if (selectedDiv) {
-            selectedDiv.style.display = 'block';
-        }
+        if (selectedDiv) selectedDiv.style.display = 'block';
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const modalElement = document.getElementById('mis-torneos');
     if (modalElement) {
         modalElement.addEventListener('shown.bs.modal', function () {
