@@ -10,13 +10,13 @@
 class EmailService {
 
     // ── Configuración ──────────────────────────────────────────────────────
-    private const API_KEY  = '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';   // ← CAMBIA ESTO (xkeysib-...)
-    private const URL_BASE = 'https://xhess.gt.tc';    // ← tu dominio (ya correcto)
+    private const API_KEY  = ''; 
+    private const URL_BASE = '';
     // ──────────────────────────────────────────────────────────────────────
 
-    private const API_URL   = 'https://api.brevo.com/v3/smtp/email';
-    private const FROM_NAME  = 'XHESS';
-    private const FROM_EMAIL = 'xhess.oficial@gmail.com';
+    private const API_URL   = '';
+    private const FROM_NAME  = '';
+    private const FROM_EMAIL = '';
 
     /**
      * Envía el correo de verificación al usuario recién registrado.
