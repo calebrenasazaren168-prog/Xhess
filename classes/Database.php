@@ -6,9 +6,9 @@ class Database {
     private function __construct() {
         try {
             $this->pdo = new PDO(
-                "mysql:host=sql210.infinityfree.com;dbname=if0_41208215_xhess;charset=utf8mb4",
-                "if0_41208215", 
-                "JVSQboayJ9R3bo",
+                "agrega la direccion de tu bd",
+                "nombre", 
+                "key",
                 [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
